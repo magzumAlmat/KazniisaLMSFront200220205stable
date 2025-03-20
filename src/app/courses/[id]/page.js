@@ -22,6 +22,7 @@ import { getAllCoursesAction, logoutAction } from "../../../store/slices/authSli
 import TopMenu from "../../../components/topmenu";
 import DOMPurify from "dompurify";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 // Тема в стиле Next.js Template от lucasbaquinoo
 const theme = createTheme({
@@ -84,10 +85,11 @@ const theme = createTheme({
 
 // Компонент VideoPlayer
 const VideoPlayer = ({ material }) => {
+  const { t } = useTranslation();
   if (!material || !material.file_path) {
     return (
       <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>
-        Видео недоступно.
+        {t("courseDetail.videoUnavailable")}
       </Typography>
     );
   }
@@ -101,13 +103,14 @@ const VideoPlayer = ({ material }) => {
       </Typography>
       <video controls style={{ width: "100%", maxHeight: "400px", borderRadius: "8px" }}>
         <source src={material.file_path} type="video/mp4" />
-        Ваш браузер не поддерживает воспроизведение видео.
+        {t("courseDetail.videoNotSupported")}
       </video>
     </Box>
   );
 };
 
 export default function CourseDetail() {
+  const { t } = useTranslation();
   const host = process.env.NEXT_PUBLIC_HOST;
   const { id } = useParams();
   const router = useRouter();
@@ -202,7 +205,7 @@ export default function CourseDetail() {
     if (!filteredLessons.length || !filteredLessons[activeTab]?.content) {
       return (
         <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>
-          Нет содержимого для отображения.
+          {t("courseDetail.noContent")}
         </Typography>
       );
     }
@@ -234,7 +237,7 @@ export default function CourseDetail() {
       console.error("Ошибка при рендеринге текста:", error);
       return (
         <Typography color="error" sx={{ fontSize: "1rem" }}>
-          Ошибка: {error.message}
+          {t("courseDetail.contentError", { message: error.message })}
         </Typography>
       );
     }
@@ -270,7 +273,7 @@ export default function CourseDetail() {
         p.lesson_id === lessonId ? { ...p, status: "completed" } : p
       );
       setProgresses(updatedProgresses);
-      alert("Урок завершен");
+      alert(t("courseDetail.lessonCompletedAlert"));
       router.push(`/courses/${id}`);
       window.location.reload();
     } catch (error) {
@@ -297,7 +300,7 @@ export default function CourseDetail() {
           }}
         >
           <Typography sx={{ color: theme.palette.text.primary, fontSize: "1.25rem" }}>
-            Loading...
+            {t("courseDetail.loading")}
           </Typography>
         </Box>
       </ThemeProvider>
@@ -319,7 +322,7 @@ export default function CourseDetail() {
         <Box sx={{ p: 3, textAlign: "center", bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
           <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
           <Typography variant="h6" sx={{ color: theme.palette.text.primary, fontSize: "1.5rem" }}>
-            Нет доступных уроков.
+            {t("courseDetail.noLessons")}
           </Typography>
         </Box>
       </ThemeProvider>
@@ -343,7 +346,7 @@ export default function CourseDetail() {
             variant="scrollable"
             value={activeTab}
             onChange={handleChangeTab}
-            aria-label="Уроки курса"
+            aria-label="Course lessons"
             sx={{
               borderBottom: isMobile ? 1 : 0,
               borderRight: isMobile ? 0 : 1,
@@ -387,7 +390,7 @@ export default function CourseDetail() {
                 variant="subtitle1"
                 sx={{ color: theme.palette.text.secondary, fontSize: { xs: "0.875rem", sm: "1rem" }, mb: 3 }}
               >
-                Пройдено {getCompletedLessonsCount()} из {filteredLessons.length} уроков
+                {t("courseDetail.progressText", { completed: getCompletedLessonsCount(), total: filteredLessons.length })}
               </Typography>
 
               <Typography
@@ -430,7 +433,7 @@ export default function CourseDetail() {
                 variant="h5"
                 sx={{ color: theme.palette.text.primary, fontSize: { xs: "1.25rem", sm: "1.5rem" }, mb: 2 }}
               >
-                Видео-материалы:
+                {t("courseDetail.videosTitle")}
               </Typography>
               {videoMaterials.length > 0 ? (
                 videoMaterials.map((material) => (
@@ -440,7 +443,7 @@ export default function CourseDetail() {
                 ))
               ) : (
                 <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>
-                  Нет доступных видео.
+                  {t("courseDetail.noVideos")}
                 </Typography>
               )}
 
@@ -448,7 +451,7 @@ export default function CourseDetail() {
                 variant="h5"
                 sx={{ color: theme.palette.text.primary, fontSize: { xs: "1.25rem", sm: "1.5rem" }, mt: 4, mb: 2 }}
               >
-                Дополнительные материалы:
+                {t("courseDetail.materialsTitle")}
               </Typography>
               {filteredMaterials.length > 0 ? (
                 <MuiList>
@@ -459,7 +462,7 @@ export default function CourseDetail() {
                     >
                       <ListItemText
                         primary={material.title}
-                        secondary={`Тип: ${material.type}`}
+                        secondary={t("courseDetail.type", { type: material.type })}
                         primaryTypographyProps={{ color: theme.palette.text.primary, fontSize: { xs: "0.875rem", sm: "1rem" } }}
                         secondaryTypographyProps={{ color: theme.palette.text.secondary, fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
                       />
@@ -476,7 +479,7 @@ export default function CourseDetail() {
                             size="small"
                             sx={{ ml: { xs: 0, sm: 2 }, fontSize: "0.875rem", borderRadius: "8px" }}
                           >
-                            Перейти к тесту
+                            {t("courseDetail.goToTest")}
                           </Button>
                         </a>
                       ) : (
@@ -488,7 +491,7 @@ export default function CourseDetail() {
                           size="small"
                           sx={{ ml: { xs: 0, sm: 2 }, mt: { xs: 1, sm: 0 }, fontSize: "0.875rem", borderRadius: "8px" }}
                         >
-                          Скачать
+                          {t("courseDetail.download")}
                         </Button>
                       )}
                     </ListItem>
@@ -496,7 +499,7 @@ export default function CourseDetail() {
                 </MuiList>
               ) : (
                 <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>
-                  Нет доступных материалов.
+                  {t("courseDetail.noMaterials")}
                 </Typography>
               )}
 
@@ -521,7 +524,9 @@ export default function CourseDetail() {
                     "&:hover": { transform: "scale(1.02)" },
                   }}
                 >
-                  {isLessonCompleted(filteredLessons[activeTab]?.id) ? "Урок завершен" : "Завершить урок"}
+                  {isLessonCompleted(filteredLessons[activeTab]?.id)
+                    ? t("courseDetail.lessonCompleted")
+                    : t("courseDetail.completeLesson")}
                 </Button>
               </Box>
             </Paper>

@@ -392,6 +392,8 @@ export const authSlice = createSlice({
         state.courses=action.payload
         state.loadingCourses=false
         console.log('getAllCoursesReducer start ')
+
+       
   },
 
   
@@ -545,21 +547,43 @@ export const  getCourseByIdAction = (id) => async(dispatch) => {
 };
 
 
-export const  getAllCoursesAction= () => async(dispatch) => {
-  console.log('1 getAllCourse started')
+// export const  getAllCoursesAction= () => async(dispatch) => {
+//   console.log('1 getAllCourse started')
   
-  const response = await axios.get(
-    `${host}/api/courses`,{
-      // headers: {
-      //   'Authorization': `Bearer ${token}`,
-      //   'Content-Type': 'application/json', 
-      // },
-    }
-  ).then((response) => {
-    console.log('1.2 getAllCourse response ',response.data)
+//   const response = await axios.get(
+//     `${host}/api/courses`
+     
+//   ).then((response) => {
+//     console.log('1.2 getAllCourse response ',response.data)
+//     dispatch(getAllCoursesReducer(response.data));
+//   });
+// };
+
+export const getAllCoursesAction = () => async (dispatch) => {
+  console.log("1 getAllCourse started");
+
+  // Во время сборки возвращаем заглушку
+  if (process.env.NODE_ENV === "production" && typeof window === "undefined") {
+    const mockData = [{ id: 1, title: "Mock Course", description: "Mock Description" }];
+    console.log("1.1 Using mock data for build:", mockData);
+    dispatch(getAllCoursesReducer(mockData));
+    return Promise.resolve(mockData); // Обязательно возвращаем промис для .unwrap()
+  }
+
+  // Реальный запрос для выполнения в браузере
+  try {
+    const response = await axios.get(`${host}/api/courses`, {
+      timeout: 5000, // Тайм-аут для надежности
+    });
+    console.log("1.2 getAllCourse response:", response.data);
     dispatch(getAllCoursesReducer(response.data));
-  });
+    return response.data; // Возвращаем данные для .unwrap()
+  } catch (error) {
+    console.error("Ошибка в getAllCoursesAction:", error);
+    throw error; // Пробрасываем ошибку для .unwrap()
+  }
 };
+
 
 export const  getAllCompanies= () => async(dispatch) => {
   console.log('1 getAllBanner started', token)

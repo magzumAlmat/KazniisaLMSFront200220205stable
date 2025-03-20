@@ -40,5 +40,25 @@
     "progressText": "Completed {{completed}} of {{total}} lessons",
     "contentError": "Error: {{message}}",
     "lessonCompletedAlert": "Lesson completed"
+  },
+  "profile": {
+    "title": "My Profile",
+    "name": "Name",
+    "lastname": "Last Name",
+    "phone": "Phone",
+    "areasofactivity": "Area of Activity",
+    "save": "Save",
+    "select_area": "Select an area",
+    "activity_options": {
+      "construction_management": "Construction Project Management",
+      "design": "Design",
+      "expertise": "Expertise and Compliance Assessment",
+      "construction_work": "Construction Work Production",
+      "control": "Control and Supervision",
+      "development": "Development and Real Estate"
+    },
+    "success": "Profile successfully updated",
+    "error": "An error occurred while updating the profile: {{message}}",
+    "network_error": "Failed to connect to the server"
   }
 }

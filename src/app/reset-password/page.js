@@ -17,3 +17,6 @@ export default function ResetPasswordPage() {
     </>
   );
 }
+
+
+export const dynamic = "force-dynamic";

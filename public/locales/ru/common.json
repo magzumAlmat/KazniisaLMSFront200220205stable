@@ -41,4 +41,25 @@
     "contentError": "Ошибка: {{message}}",
     "lessonCompletedAlert": "Урок завершен"
   }
+  ,
+  "profile": {
+    "title": "Мой профиль",
+    "name": "Имя",
+    "lastname": "Фамилия",
+    "phone": "Телефон",
+    "areasofactivity": "Сфера деятельности",
+    "save": "Сохранить",
+    "select_area": "Выберите сферу",
+    "activity_options": {
+      "construction_management": "Управление строительными проектами",
+      "design": "Проектирование",
+      "expertise": "Экспертиза и оценка соответствия",
+      "construction_work": "Производство строительных работ",
+      "control": "Контроль и надзор",
+      "development": "Девелопмент и недвижимость"
+    },
+    "success": "Профиль успешно обновлен",
+    "error": "Произошла ошибка при обновлении профиля: {{message}}",
+    "network_error": "Не удалось подключиться к серверу"
+  }
 }

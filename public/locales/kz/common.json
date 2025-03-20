@@ -40,5 +40,25 @@
     "progressText": "{{total}} сабақтың {{completed}}-ы аяқталды",
     "contentError": "Қате: {{message}}",
     "lessonCompletedAlert": "Сабақ аяқталды"
+  },
+  "profile": {
+    "title": "Менің профилім",
+    "name": "Аты",
+    "lastname": "Тегі",
+    "phone": "Телефон",
+    "areasofactivity": "Қызмет саласы",
+    "save": "Сақтау",
+    "select_area": "Саланы таңдаңыз",
+    "activity_options": {
+      "construction_management": "Құрылыс жобаларын басқару",
+      "design": "Жобалау",
+      "expertise": "Сараптама және сәйкестікті бағалау",
+      "construction_work": "Құрылыс жұмыстарын өндіру",
+      "control": "Бақылау және қадағалау",
+      "development": "Девелопмент және жылжымайтын мүлік"
+    },
+    "success": "Профиль сәтті жаңартылды",
+    "error": "Профильді жаңарту кезінде қате пайда болды: {{message}}",
+    "network_error": "Серверге қосылу мүмкін болмады"
   }
 }

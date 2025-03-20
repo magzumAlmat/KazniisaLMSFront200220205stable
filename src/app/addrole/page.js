@@ -12,6 +12,7 @@ import {
   Button,
   Box,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import jwtDecode from "jwt-decode";
 import TopMenu from "../../components/topmenu";
@@ -31,41 +32,54 @@ export default function UpdateUserRolePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [token, setToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true); // Добавляем состояние загрузки
   const host = process.env.NEXT_PUBLIC_HOST;
 
   // Инициализация токена и проверка его валидности
   useEffect(() => {
+    // Во время сборки используем заглушки
+    if (process.env.NODE_ENV === "production" && typeof window === "undefined") {
+      setUsers([{ id: 1, email: "mock@example.com", name: "Mock User" }]);
+      setFilteredUsers([{ id: 1, email: "mock@example.com", name: "Mock User" }]);
+      setUserInfo({ id: 1, username: "Mock Admin" });
+      setToken("mock-token");
+      setLoading(false);
+      return;
+    }
+
     const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     console.log("Stored token:", storedToken);
 
     if (!storedToken) {
       console.error("Token not available");
       router.push("/login");
+      setLoading(false);
       return;
     }
 
     try {
       const decodedToken = jwtDecode(storedToken);
       console.log("Decoded token:", decodedToken);
-      setToken(storedToken); // Устанавливаем токен только после успешного декодирования
+      setToken(storedToken);
     } catch (err) {
       console.error("Invalid token:", err.message);
-      localStorage.removeItem("token"); // Удаляем некорректный токен
+      localStorage.removeItem("token");
       router.push("/login");
+      setLoading(false);
     }
   }, [router]);
 
   // Загрузка пользователей и данных пользователя
   useEffect(() => {
-    if (!token) {
-      return; // Ждем, пока токен не будет установлен
-    }
+    if (!token) return;
 
     const fetchData = async () => {
       try {
+        setLoading(true);
         // Загрузка списка пользователей
         const usersResponse = await axios.get(`${host}/api/getallusers`, {
           headers: { Authorization: `Bearer ${token}` },
+          timeout: 5000, // Добавляем тайм-аут
         });
         const usersData = usersResponse.data.users || [];
         console.log("Data from API:", usersData);
@@ -75,6 +89,7 @@ export default function UpdateUserRolePage() {
         // Загрузка информации о текущем пользователе
         const userInfoResponse = await axios.get(`${host}/api/auth/getAuthentificatedUserInfo`, {
           headers: { Authorization: `Bearer ${token}` },
+          timeout: 5000, // Добавляем тайм-аут
         });
         setUserInfo(userInfoResponse.data);
       } catch (err) {
@@ -85,6 +100,8 @@ export default function UpdateUserRolePage() {
         } else {
           setError("Не удалось загрузить данные");
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -120,12 +137,13 @@ export default function UpdateUserRolePage() {
     try {
       const response = await axios.put(
         `${host}/api/users/${userId}/role`,
-        { roleId: Number(roleId) }, // Убедимся, что roleId отправляется как число
+        { roleId: Number(roleId) },
         {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
+          timeout: 5000, // Добавляем тайм-аут
         }
       );
       setMessage(response.data.message || "Роль успешно обновлена");
@@ -146,6 +164,21 @@ export default function UpdateUserRolePage() {
     localStorage.removeItem("token");
     router.push("/login");
   };
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -229,3 +262,5 @@ export default function UpdateUserRolePage() {
     </>
   );
 }
+
+export const dynamic = "force-dynamic";

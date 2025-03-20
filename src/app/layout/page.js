@@ -174,8 +174,11 @@ export default function Courses() {
     <ThemeProvider theme={theme}>
       <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
         <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
-      
+        <Container>
+        <h3 style={{color:"#ffffffff"}}>Пожалуйста, заполните профиль и обратитесь к администрации для получения доступа.</h3>
+      </Container>
       </Box>
+    
     </ThemeProvider>
   );
 

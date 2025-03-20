@@ -78,9 +78,7 @@ const NotAuth = () => {
   return (
     <>
       <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
-      <Container>
-        <h3>Свяжитесь с администрацией, чтобы вам дали доступ</h3>
-      </Container>
+      
     </>
   );
 };

@@ -68,6 +68,7 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
+          width:'90%',
           borderRadius: "12px",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
         },
@@ -344,6 +345,8 @@ export default function CourseDetail() {
           <Tabs
             orientation={isMobile ? "horizontal" : "vertical"}
             variant="scrollable"
+            scrollButtons={false}
+           
             value={activeTab}
             onChange={handleChangeTab}
             aria-label="Course lessons"
@@ -351,10 +354,16 @@ export default function CourseDetail() {
               borderBottom: isMobile ? 1 : 0,
               borderRight: isMobile ? 0 : 1,
               borderColor: "divider",
-              width: { xs: "100%", sm: "280px" },
+              width: { xs: "100%", sm: "120px" },
               bgcolor: theme.palette.background.paper,
               maxHeight: { xs: "auto", sm: "calc(100vh - 64px)" },
-              overflowY: "auto",
+              overflowY: "auto", // Уже есть, но уточняем поведение
+              "& .MuiTabs-scroller": { // Кастомизация внутренней области прокрутки
+                overflowY: "auto !important",
+                scrollbarWidth: "thin", // Для Firefox
+                "&::-webkit-scrollbar": { width: "6px" }, // Для Webkit-браузеров
+                "&::-webkit-scrollbar-thumb": { backgroundColor: theme.palette.grey[600], borderRadius: "3px" },
+              },
               flexShrink: 0,
             }}
           >
@@ -365,22 +374,25 @@ export default function CourseDetail() {
                 sx={{
                   textTransform: "none",
                   fontWeight: 500,
-                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                  fontSize: { xs: "0.75rem", sm: "1rem" },
                   color: theme.palette.text.secondary,
                   "&.Mui-selected": { color: theme.palette.primary.main, bgcolor: "rgba(16, 185, 129, 0.1)" },
                   minHeight: { xs: 48, sm: 60 },
                   px: 3,
                   py: 1.5,
                 }}
+               
               />
             ))}
           </Tabs>
 
-          <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 4 } }}>
-            <Paper
+          <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 1 } }}>
+          
+            <Paper style={{margin:' 0 px 0 0 0px'}}
               elevation={3}
-              sx={{ p: { xs: 3, sm: 4 }, bgcolor: theme.palette.background.paper, width: "100%" }}
+              sx={{ p: { xs: 3, sm: 4 }, bgcolor: theme.palette.background.paper, width: "90%" }}
             >
+            
               <LinearProgress
                 variant="determinate"
                 value={(getCompletedLessonsCount() / filteredLessons.length) * 100 || 0}

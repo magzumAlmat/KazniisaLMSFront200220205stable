@@ -35,6 +35,7 @@ export default function MaterialsPage() {
   const [editingMaterial, setEditingMaterial] = useState(null);
   const [files, setFiles] = useState([]);
   const [documentFiles, setDocumentFiles] = useState([]);
+  const [imageFiles, setImageFiles] = useState([]); // Для картинок
   const [presentationFiles, setPresentationFiles] = useState([]);
   const [courses, setCourses] = useState([]);
   const [testFilePath, setTestFilePath] = useState("");
@@ -82,6 +83,19 @@ export default function MaterialsPage() {
     accept: "*/*",
     onDrop: (acceptedFiles) => {
       setDocumentFiles(
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+    },
+  });
+
+  const { getRootProps: getImageRootProps, getInputProps: getImageInputProps } = useDropzone({
+    accept: "image/*",
+    onDrop: (acceptedFiles) => {
+      setImageFiles(
         acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
@@ -151,9 +165,28 @@ export default function MaterialsPage() {
     }
   };
 
+  // const createMaterial = async () => {
+  //   if (!title || !type || (type === "video" && files.length === 0) || !lesson_id) {
+  //     alert("Заполните все поля и выберите файл!");
+  //     return;
+  //   }
+
+
+
   const createMaterial = async () => {
-    if (!title || !type || (type === "video" && files.length === 0) || !lesson_id) {
-      alert("Заполните все поля и выберите файл!");
+    if (!title || !type || !lesson_id) {
+      alert("Заполните все поля!");
+      return;
+    }
+
+    if (
+      (type === "video" && files.length === 0) ||
+      (type === "image" && imageFiles.length === 0) ||
+      (type === "document" && documentFiles.length === 0) ||
+      (type === "presentation" && presentationFiles.length === 0) ||
+      (type === "test" && testFilePath.trim() === "")
+    ) {
+      alert("Выберите файл или укажите ссылку на тест!");
       return;
     }
 
@@ -171,7 +204,22 @@ export default function MaterialsPage() {
             "Content-Type": "multipart/form-data",
           },
         });
-      } else if (type === "document") {
+      } 
+      else if (type === "image") {
+        const formData = new FormData();
+        formData.append("file", imageFiles[0]);
+        formData.append("name", title);
+        uploadedFileResponse = await axios.post(`${host}/api/upload`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
+      
+      
+      
+      else if (type === "document") {
         const formData = new FormData();
         formData.append("file", documentFiles[0]);
         formData.append("name", title);
@@ -220,6 +268,7 @@ export default function MaterialsPage() {
       setFilePath("");
       setLessonId("");
       setFiles([]);
+      setImageFiles([]);
       setDocumentFiles([]);
       setPresentationFiles([]);
       setTestFilePath("");
@@ -275,6 +324,7 @@ export default function MaterialsPage() {
               <InputLabel>Тип материала</InputLabel>
               <Select value={type} onChange={(e) => setType(e.target.value)} fullWidth required>
                 <MenuItem value="video">Видео</MenuItem>
+                <MenuItem value="image">Картинка</MenuItem>
                 <MenuItem value="document">Документ</MenuItem>
                 <MenuItem value="presentation">Презентация</MenuItem>
                 <MenuItem value="test">Ссылка на тест</MenuItem>
@@ -290,6 +340,24 @@ export default function MaterialsPage() {
                 {files.length > 0 && <Typography>Выбранный файл: {files[0].name}</Typography>}
               </Box>
             )}
+
+            {type === "image" && (
+              <Box mt={2}>
+                <div {...getImageRootProps()}>
+                  <input {...getImageInputProps()} />
+                  <Typography>Перетащите картинку сюда или нажмите для выбора</Typography>
+                </div>
+                {imageFiles.length > 0 && (
+                  <Typography>Выбранный файл: {imageFiles[0].name}</Typography>
+                )}
+              </Box>
+             
+            )}
+             {type === "image" && imageFiles.length > 0 && (
+                <Box mt={2}>
+                  <img src={imageFiles[0].preview} alt="Preview" style={{ maxWidth: "200px" }} />
+                </Box>
+              )}
 
             {type === "document" && (
               <Box mt={2}>

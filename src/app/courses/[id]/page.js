@@ -22,23 +22,14 @@ import { getAllCoursesAction, logoutAction } from "../../../store/slices/authSli
 import TopMenu from "../../../components/topmenu";
 import DOMPurify from "dompurify";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Header from "@editorjs/header";
+import List from "@editorjs/list";
 
-// Импортируем необходимые плагины Editor.js
-import Header from "@editorjs/header"; // Для заголовков
-import List from "@editorjs/list";   // Для списков
-
-// Тема в стиле Next.js Template от lucasbaquinoo
 const theme = createTheme({
   palette: {
-    primary: { main: "#009eb0",  //бирюзовый
-      contrastText: "#fff" },
-    secondary: { main: "#009eb0",
-
-     },
-
-    background: { default: "#1f2937", 
-      paper: "#1c1c1b" //черный
-    },
+    primary: { main: "#009eb0", contrastText: "#fff" },
+    secondary: { main: "#009eb0" },
+    background: { default: "#1f2937", paper: "#1c1c1b" },
     text: { primary: "#fff", secondary: "#d1d5db" },
   },
   typography: {
@@ -50,12 +41,7 @@ const theme = createTheme({
   components: {
     MuiButton: {
       styleOverrides: {
-        root: {
-          textTransform: "none",
-          borderRadius: "8px",
-          padding: "8px 16px",
-          transition: "all 0.2s ease-in-out",
-        },
+        root: { textTransform: "none", borderRadius: "8px", padding: "8px 16px", transition: "all 0.2s ease-in-out" },
       },
     },
     MuiCard: {
@@ -64,32 +50,35 @@ const theme = createTheme({
           borderRadius: "12px",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
           transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-          "&:hover": {
-            transform: "translateY(-4px)",
-            boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)",
-          },
+          "&:hover": { transform: "translateY(-4px)", boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)" },
         },
       },
     },
   },
 });
 
-// Компонент VideoPlayer
 const VideoPlayer = ({ material }) => {
+  console.log("Materials from player ", material);
   if (!material || !material.file_path) {
     return <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>Видео недоступно.</Typography>;
   }
+  const updatedFilePath = material.file_path.replace(":4000", "");
   return (
     <Box>
       <Typography variant="h6" sx={{ color: theme.palette.text.primary, fontSize: { xs: "1.125rem", sm: "1.25rem" }, mb: 1 }}>
         {material.title}
       </Typography>
       <video controls style={{ width: "100%", maxHeight: "400px", borderRadius: "8px" }}>
-        <source src={material.file_path} type="video/mp4" />
+        <source src={updatedFilePath} type="video/mp4" />
         Ваш браузер не поддерживает воспроизведение видео.
       </video>
     </Box>
   );
+};
+
+const getUpdatedFilePath = (filePath) => {
+  console.log("getUpdatedFilePath started", filePath);
+  return filePath.replace(":4000", "");
 };
 
 export default function CourseDetail() {
@@ -135,8 +124,11 @@ export default function CourseDetail() {
 
   const fetchMaterials = async () => {
     try {
-      const response = await axios.get(`${host}/api/materials`, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.get(`https://lms.kazniisa.kz/api/materials`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setMaterials(response.data);
+      console.log("Вывод= ", response.data);
     } catch (error) {
       console.error("Ошибка при загрузке материалов:", error);
     }
@@ -144,7 +136,9 @@ export default function CourseDetail() {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await axios.get(`${host}/api/auth/getAuthentificatedUserInfo`, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.get(`${host}/api/auth/getAuthentificatedUserInfo`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setUserInfo(response.data);
     } catch (err) {
       console.error("Ошибка при загрузке информации о пользователе:", err);
@@ -154,7 +148,9 @@ export default function CourseDetail() {
 
   const fetchAllProgresses = async (userId, courseId) => {
     try {
-      const response = await axios.get(`${host}/api/course/progress/${userId}/${courseId}`, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.get(`${host}/api/course/progress/${userId}/${courseId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setProgresses(response.data.lessons || []);
     } catch (error) {
       console.error("Ошибка при получении прогресса:", error);
@@ -171,16 +167,13 @@ export default function CourseDetail() {
     if (!filteredLessons.length || !filteredLessons[activeTab]?.content) {
       return <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>Нет содержимого для отображения.</Typography>;
     }
-  
     try {
       const rawContent = JSON.parse(filteredLessons[activeTab].content);
-      console.log(rawContent)
+      console.log(rawContent);
       const blocks = rawContent.blocks;
-  
       if (!blocks || !Array.isArray(blocks)) {
         throw new Error("Некорректный формат данных: отсутствует массив blocks");
       }
-  
       return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {blocks.map((block, index) => {
@@ -190,12 +183,7 @@ export default function CourseDetail() {
                   <Typography
                     key={block.id || index}
                     variant={`h${block.data.level || 2}`}
-                    sx={{
-                      color: theme.palette.text.primary,
-                      fontWeight: 600,
-                      fontSize: { xs: "1.25rem", sm: "1.5rem" },
-                      lineHeight: 1.3,
-                    }}
+                    sx={{ color: theme.palette.text.primary, fontWeight: 600, fontSize: { xs: "1.25rem", sm: "1.5rem" }, lineHeight: 1.3 }}
                   >
                     {DOMPurify.sanitize(block.data.text)}
                   </Typography>
@@ -206,11 +194,7 @@ export default function CourseDetail() {
                   <Typography
                     key={block.id || index}
                     variant="body1"
-                    sx={{
-                      color: theme.palette.text.secondary,
-                      lineHeight: 1.8,
-                      fontSize: { xs: "0.875rem", sm: "1rem" },
-                    }}
+                    sx={{ color: theme.palette.text.secondary, lineHeight: 1.8, fontSize: { xs: "0.875rem", sm: "1rem" } }}
                     dangerouslySetInnerHTML={{ __html: sanitizedText }}
                   />
                 );
@@ -220,22 +204,15 @@ export default function CourseDetail() {
                     key={block.id || index}
                     sx={{
                       color: theme.palette.text.secondary,
-                      pl: 4, // Отступ для списка
+                      pl: 4,
                       listStyleType: block.data.style === "ordered" ? "decimal" : "disc",
-                      "& li": { display: "list-item" }, // Убедимся, что элементы списка отображаются корректно
+                      "& li": { display: "list-item" },
                     }}
                   >
                     {block.data.items.map((item, i) => (
-                      console.log('all lists= ',item.content),
                       <ListItem key={i} sx={{ p: 0, mb: 0.5 }}>
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: theme.palette.text.secondary,
-                            fontSize: { xs: "0.875rem", sm: "1rem" },
-                          }}
-                        >
-                          {DOMPurify.sanitize(item.content)}
+                        <Typography variant="body1" sx={{ color: theme.palette.text.secondary, fontSize: { xs: "0.875rem", sm: "1rem" } }}>
+                          {DOMPurify.sanitize(item.content || item)}
                         </Typography>
                       </ListItem>
                     ))}
@@ -275,11 +252,7 @@ export default function CourseDetail() {
                 );
               default:
                 return (
-                  <Typography
-                    key={block.id || index}
-                    color="warning"
-                    sx={{ fontSize: "1rem" }}
-                  >
+                  <Typography key={block.id || index} color="warning" sx={{ fontSize: "1rem" }}>
                     Неизвестный тип блока: {block.type}
                   </Typography>
                 );
@@ -303,7 +276,6 @@ export default function CourseDetail() {
   const handleCompleteLesson = async (lessonId) => {
     const decoded = jwtDecode(token);
     if (!completedLessons.includes(lessonId)) setCompletedLessons([...completedLessons, lessonId]);
-
     try {
       await axios.put(
         `${host}/api/progress/update`,
@@ -354,17 +326,16 @@ export default function CourseDetail() {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh" }}> */}
-       <Box
-                           sx={{
-                             bgcolor: theme.palette.background.default,
-                             minHeight: "100vh",
-                             backgroundImage: `url(/background.jpg)`, // Исправлено "backgound" на "background"
-                             backgroundSize: "cover",
-                             backgroundPosition: "center",
-                             backgroundRepeat: "no-repeat",
-                           }}
-                         >
+      <Box
+        sx={{
+          bgcolor: theme.palette.background.default,
+          minHeight: "100vh",
+          backgroundImage: `url(/background.jpg)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
         <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, minHeight: "calc(100vh - 64px)", p: { xs: 2, sm: 3 } }}>
           <Tabs
@@ -402,7 +373,7 @@ export default function CourseDetail() {
             ))}
           </Tabs>
 
-          <Box sx={{ flexGrow: 1, p: { } }} style={{padding:'0 1px'}}>
+          <Box sx={{ flexGrow: 1, p: {} }} style={{ padding: "0 1px" }}>
             <Paper elevation={3} sx={{ p: { xs: 3, sm: 4 }, bgcolor: theme.palette.background.paper, width: "auto" }}>
               <LinearProgress
                 variant="determinate"
@@ -423,20 +394,19 @@ export default function CourseDetail() {
                   src={filteredLessons[activeTab].image}
                   alt={`Lesson ${activeTab + 1}`}
                   sx={{ width: "100%", height: { xs: "200px", sm: "350px" }, objectFit: "cover", borderRadius: "8px", mb: 3 }}
-                
                 />
               )}
 
-              <Box 
-              
-              sx={{ minHeight: "250px", 
-              border: `1px solid ${theme.palette.divider}`,
-               p: 2, borderRadius: "8px", 
-               bgcolor: "#2d3748",
-                mb: 3 
+              <Box
+                sx={{
+                  minHeight: "250px",
+                  border: `1px solid ${theme.palette.divider}`,
+                  p: 2,
+                  borderRadius: "8px",
+                  bgcolor: "#2d3748",
+                  mb: 3,
                 }}
-               
-                >
+              >
                 {renderLessonContent()}
               </Box>
               <Divider sx={{ my: 3, bgcolor: theme.palette.divider }} />
@@ -457,36 +427,77 @@ export default function CourseDetail() {
               <Typography variant="h5" sx={{ color: theme.palette.text.primary, fontSize: { xs: "1.25rem", sm: "1.5rem" }, mt: 4, mb: 2 }}>
                 Дополнительные материалы:
               </Typography>
+
               {filteredMaterials.length > 0 ? (
                 <MuiList>
-                  {filteredMaterials.map((material) => (
-                    <ListItem key={material.material_id} sx={{ flexDirection: { xs: "column", sm: "row" }, alignItems: { xs: "flex-start", sm: "center" }, py: 1.5 }}>
-                      <ListItemText
-                        primary={material.title}
-                        secondary={`Тип: ${material.type}`}
-                        primaryTypographyProps={{ color: theme.palette.text.primary, fontSize: { xs: "0.875rem", sm: "1rem" } }}
-                        secondaryTypographyProps={{ color: theme.palette.text.secondary, fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
-                      />
-                      {material.type === "test" ? (
-                        <a href={material.file_path} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", marginTop: { xs: 1, sm: 0 } }}>
-                          <Button variant="outlined" color="secondary" size="small" sx={{ ml: { xs: 0, sm: 2 }, fontSize: "0.875rem", borderRadius: "8px" }}>
-                            Перейти к тесту
-                          </Button>
-                        </a>
-                      ) : (
-                        <Button
-                          href={material.file_path}
-                          download={material.title || "file"}
-                          variant="outlined"
-                          color="secondary"
-                          size="small"
-                          sx={{ ml: { xs: 0, sm: 2 }, mt: { xs: 1, sm: 0 }, fontSize: "0.875rem", borderRadius: "8px" }}
-                        >
-                          Скачать
-                        </Button>
-                      )}
-                    </ListItem>
-                  ))}
+                  {filteredMaterials.map((material) => {
+                    const updatedFilePath = material.file_path ? getUpdatedFilePath(material.file_path) : null;
+                    console.log('updatedFilePath for material', material.material_id, ':', updatedFilePath);
+
+                    return (
+                      <ListItem
+                        key={material.material_id}
+                        sx={{
+                          flexDirection: { xs: "column", sm: "row" },
+                          alignItems: { xs: "flex-start", sm: "center" },
+                          py: 1.5,
+                        }}
+                      >
+                        <ListItemText
+                          primary={material.title}
+                          secondary={`Тип: ${material.type}`}
+                          primaryTypographyProps={{
+                            color: theme.palette.text.primary,
+                            fontSize: { xs: "0.875rem", sm: "1rem" },
+                          }}
+                          secondaryTypographyProps={{
+                            color: theme.palette.text.secondary,
+                            fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                          }}
+                        />
+                        {material.type === "test" ? (
+                          updatedFilePath ? (
+                            <a
+                              href={updatedFilePath}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ textDecoration: "none", marginTop: { xs: 1, sm: 0 } }}
+                            >
+                              <Button
+                                variant="outlined"
+                                color="secondary"
+                                size="small"
+                                sx={{ ml: { xs: 0, sm: 2 }, fontSize: "0.875rem", borderRadius: "8px" }}
+                              >
+                                Перейти к тесту
+                              </Button>
+                            </a>
+                          ) : (
+                            <Typography sx={{ color: theme.palette.text.secondary, ml: { xs: 0, sm: 2 }, mt: { xs: 1, sm: 0 } }}>
+                              Ссылка недоступна
+                            </Typography>
+                          )
+                        ) : (
+                          updatedFilePath ? (
+                            <Button
+                              href={updatedFilePath}
+                              download={material.title || "file"}
+                              variant="outlined"
+                              color="secondary"
+                              size="small"
+                              sx={{ ml: { xs: 0, sm: 2 }, mt: { xs: 1, sm: 0 }, fontSize: "0.875rem", borderRadius: "8px" }}
+                            >
+                              Скачать
+                            </Button>
+                          ) : (
+                            <Typography sx={{ color: theme.palette.text.secondary, ml: { xs: 0, sm: 2 }, mt: { xs: 1, sm: 0 } }}>
+                              Файл недоступен
+                            </Typography>
+                          )
+                        )}
+                      </ListItem>
+                    );
+                  })}
                 </MuiList>
               ) : (
                 <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>Нет доступных материалов.</Typography>

@@ -23,24 +23,19 @@ import axios from "axios";
 // Создаем тему
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#10b981", // Зеленый акцент (emerald-500)
-      contrastText: "#fff",
+    primary: { main: "#009eb0",  //бирюзовый
+      contrastText: "#fff" },
+    secondary: { main: "#009eb0",
+
+     },
+
+    background: { default: "#1f2937", 
+      paper: "#0000" //черный
     },
-    secondary: {
-      main: "#3b82f6", // Синий акцент (blue-500)
-    },
-    background: {
-      default: "#1f2937", // Темно-серый фон (gray-800)
-      paper: "#374151", // Чуть светлее для панелей (gray-700)
-    },
-    text: {
-      primary: "#fff",
-      secondary: "#d1d5db", // Светло-серый для текста (gray-300)
-    },
+    text: { primary: "#fff", secondary: "#d1d5db" },
   },
   typography: {
-    fontFamily: "'Inter', 'Roboto', sans-serif",
+    fontFamily: "'Open Sans', sans-serif",
     h4: { fontWeight: 600 },
     h6: { fontWeight: 500 },
     body2: { fontWeight: 400 },
@@ -56,16 +51,15 @@ const theme = createTheme({
         },
       },
     },
-    MuiTextField: {
+    MuiCard: {
       styleOverrides: {
         root: {
-          "& .MuiOutlinedInput-root": {
-            borderRadius: "8px",
-            margin: '0.65rem 0px -4px 0px',
-            borderColor: "#4b5563", // Gray-600
-            "&:hover fieldset": {
-              borderColor: "#10b981", // Зеленый при наведении
-            },
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+          transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)",
           },
         },
       },
@@ -140,6 +134,7 @@ const LoginPage = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          // backgroundColor:'white'
         }}
       >
         <Container
@@ -252,7 +247,7 @@ const LoginPage = () => {
                 >
                   Войти
                 </Button>
-                <Button
+                {/* <Button
                   variant="contained"
                 
                   onClick={() => (window.location.href = `${host}/api/auth/google`)}
@@ -263,7 +258,7 @@ const LoginPage = () => {
                   }}
                 >
                   <GoogleIcon sx={{ bgcolor: "#059669",mr: 1 }} />
-                </Button>
+                </Button> */}
               </Stack>
 
               {/* Ссылки */}

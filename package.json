@@ -19,6 +19,7 @@
     "@editorjs/raw": "^2.5.0",
     "@editorjs/simple-image": "^1.6.0",
     "@editorjs/table": "^2.3.0",
+    "@editorjs/image": "^2.10.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.0.0",

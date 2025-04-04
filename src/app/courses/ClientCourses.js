@@ -24,13 +24,19 @@ import { useTranslation } from "react-i18next";
 // Определяем тему внутри клиентского компонента
 const theme = createTheme({
   palette: {
-    primary: { main: "#10b981", contrastText: "#fff" },
-    secondary: { main: "#3b82f6" },
-    background: { default: "#1f2937", paper: "#374151" },
+    primary: { main: "#009eb0",  //бирюзовый
+      contrastText: "#fff" },
+    secondary: { main: "#009eb0",
+
+     },
+
+    background: { default: "#1f2937", 
+      paper: "#1c1c1b" //черный
+    },
     text: { primary: "#fff", secondary: "#d1d5db" },
   },
   typography: {
-    fontFamily: "'Inter', 'Roboto', sans-serif",
+    fontFamily: "'Open Sans', sans-serif",
     h4: { fontWeight: 600 },
     h6: { fontWeight: 500 },
     body2: { fontWeight: 400 },
@@ -194,14 +200,24 @@ export default function ClientCourses() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ bgcolor: "background.default", minHeight: "100vh" }}>
+       <Box
+                     sx={{
+                       bgcolor: theme.palette.background.default,
+                       minHeight: "100vh",
+                       backgroundImage: `url(/background.jpg)`, // Исправлено "backgound" на "background"
+                       backgroundSize: "cover",
+                       backgroundPosition: "center",
+                       backgroundRepeat: "no-repeat",
+                     }}
+                   >
         <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
         <Container sx={{ py: { xs: 4, sm: 6 }, px: { xs: 2, sm: 3 } }}>
           <Typography
             variant="h4"
             gutterBottom
             sx={{
-              color: "text.primary",
+              color: "#333333",
+              fontFamily: "'Open Sans', sans-serif",
               textAlign: "center",
               mb: { xs: 4, sm: 6 },
               fontSize: { xs: "1.75rem", sm: "2.25rem" },

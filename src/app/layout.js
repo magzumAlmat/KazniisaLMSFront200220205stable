@@ -29,7 +29,10 @@ export default function RootLayout({ children}) {
   return (
     <html lang={i18n.language || "ru"}>
       <ReduxProvider>
-   
+      <head>
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" rel="stylesheet" />
+ 
+      </head>
       <body>
         <I18nextProvider i18n={i18n}>
           {children}

@@ -17,7 +17,7 @@ import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-
+import Image from 'next/image'
 const TopMenu = ({ userInfo, handleLogout }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t, ready } = useTranslation();
@@ -98,18 +98,23 @@ const TopMenu = ({ userInfo, handleLogout }) => {
 
   return (
     <>
-      <AppBar
+    <AppBar
         position="static"
-        sx={{ bgcolor: "#374151", borderBottom: "2px solid #1565c0" }}
+        sx={{
+          backgroundColor: "transparent", // Прозрачный фон для AppBar
+          boxShadow: "none", // Убираем тень, если нужно
+        }}
       >
         <Toolbar
           sx={{
             flexWrap: "wrap",
             justifyContent: { xs: "space-between", sm: "space-between" },
             py: { xs: 1, sm: 2 },
+            backgroundColor: "transparent", // Прозрачный фон для Toolbar
           }}
         >
-          <Typography
+        
+          {/* <Typography
             variant="h6"
             component="div"
             sx={{
@@ -119,7 +124,15 @@ const TopMenu = ({ userInfo, handleLogout }) => {
             }}
           >
             {t("title")}
-          </Typography>
+          </Typography> */}
+         <div style={{ position: 'relative', width: '20%', aspectRatio: '5 / 1' }}>
+            <Image
+              src="/logo.png"
+              fill
+              style={{ objectFit: 'contain' }}
+              alt="Picture of the author"
+            />
+          </div>
           <Box
             sx={{
               display: { xs: "none", sm: "flex" },
@@ -135,11 +148,14 @@ const TopMenu = ({ userInfo, handleLogout }) => {
                 component={item.href ? Link : "button"}
                 href={item.href}
                 onClick={item.onClick}
+               
                 sx={{
                   fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" },
                   px: { xs: 1, sm: 2 },
                   minWidth: "auto",
+                  color: "#333333", // Темно-серый цвет для текста кнопок
                 }}
+                style={{ fontFamily: "Open Sans",}}
               >
                 {item.text}
               </Button>

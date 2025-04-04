@@ -30,24 +30,47 @@ import List from "@editorjs/list";   // Для списков
 // Тема в стиле Next.js Template от lucasbaquinoo
 const theme = createTheme({
   palette: {
-    primary: { main: "#10b981", contrastText: "#fff" },
-    secondary: { main: "#3b82f6" },
-    success: { main: "#22c55e" },
-    background: { default: "#1f2937", paper: "#374151" },
+    primary: { main: "#009eb0",  //бирюзовый
+      contrastText: "#fff" },
+    secondary: { main: "#009eb0",
+
+     },
+
+    background: { default: "#1f2937", 
+      paper: "#1c1c1b" //черный
+    },
     text: { primary: "#fff", secondary: "#d1d5db" },
   },
   typography: {
-    fontFamily: "'Inter', 'Roboto', sans-serif",
-    h5: { fontWeight: 600 },
+    fontFamily: "'Open Sans', sans-serif",
+    h4: { fontWeight: 600 },
     h6: { fontWeight: 500 },
-    subtitle1: { fontWeight: 400 },
-    body1: { fontWeight: 400 },
     body2: { fontWeight: 400 },
   },
   components: {
-    MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: "8px", padding: "8px 16px", transition: "all 0.2s ease-in-out" } } },
-    MuiPaper: { styleOverrides: { root: { borderRadius: "12px", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)" } } },
-    MuiTabs: { styleOverrides: { root: { borderColor: "#4b5563" } } },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          borderRadius: "8px",
+          padding: "8px 16px",
+          transition: "all 0.2s ease-in-out",
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+          transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)",
+          },
+        },
+      },
+    },
   },
 });
 
@@ -331,7 +354,17 @@ export default function CourseDetail() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
+      {/* <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh" }}> */}
+       <Box
+                           sx={{
+                             bgcolor: theme.palette.background.default,
+                             minHeight: "100vh",
+                             backgroundImage: `url(/background.jpg)`, // Исправлено "backgound" на "background"
+                             backgroundSize: "cover",
+                             backgroundPosition: "center",
+                             backgroundRepeat: "no-repeat",
+                           }}
+                         >
         <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
         <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, minHeight: "calc(100vh - 64px)", p: { xs: 2, sm: 3 } }}>
           <Tabs
@@ -369,8 +402,8 @@ export default function CourseDetail() {
             ))}
           </Tabs>
 
-          <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 4 } }}>
-            <Paper elevation={3} sx={{ p: { xs: 3, sm: 4 }, bgcolor: theme.palette.background.paper, width: "100%" }}>
+          <Box sx={{ flexGrow: 1, p: { } }} style={{padding:'0 1px'}}>
+            <Paper elevation={3} sx={{ p: { xs: 3, sm: 4 }, bgcolor: theme.palette.background.paper, width: "auto" }}>
               <LinearProgress
                 variant="determinate"
                 value={(getCompletedLessonsCount() / filteredLessons.length) * 100 || 0}
@@ -390,10 +423,20 @@ export default function CourseDetail() {
                   src={filteredLessons[activeTab].image}
                   alt={`Lesson ${activeTab + 1}`}
                   sx={{ width: "100%", height: { xs: "200px", sm: "350px" }, objectFit: "cover", borderRadius: "8px", mb: 3 }}
+                
                 />
               )}
 
-              <Box sx={{ minHeight: "250px", border: `1px solid ${theme.palette.divider}`, p: 2, borderRadius: "8px", bgcolor: "#2d3748", mb: 3 }}>
+              <Box 
+              
+              sx={{ minHeight: "250px", 
+              border: `1px solid ${theme.palette.divider}`,
+               p: 2, borderRadius: "8px", 
+               bgcolor: "#2d3748",
+                mb: 3 
+                }}
+               
+                >
                 {renderLessonContent()}
               </Box>
               <Divider sx={{ my: 3, bgcolor: theme.palette.divider }} />

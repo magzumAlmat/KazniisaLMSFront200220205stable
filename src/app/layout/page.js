@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,8 +18,7 @@ import TopMenu from "../../components/topmenu";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-// Тема в стиле Next.js Template от lucasbaquinoo
+import Divider from '@mui/material/Divider';
 const theme = createTheme({
   palette: {
     primary: {
@@ -40,7 +38,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Inter', 'Roboto', sans-serif",
+    fontFamily: "'Open Sans', 'Roboto', sans-serif", // Добавляем Open Sans в глобальную типографику
     h4: { fontWeight: 600 },
     h6: { fontWeight: 500 },
     body2: { fontWeight: 400 },
@@ -172,14 +170,61 @@ export default function Courses() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
+      <Box
+        sx={{
+          bgcolor: theme.palette.background.default,
+          minHeight: "100vh",
+          backgroundImage: `url(/background.jpg)`, // Исправлено "backgound" на "background"
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
+        <Divider/>
         <Container>
-        <h3 style={{color:"#ffffffff"}}>Пожалуйста, заполните профиль и обратитесь к администрации для получения доступа.</h3>
-      </Container>
+          <div>
+            <h1
+              style={{
+                textAlign: "center",
+                color: "#333333",
+                fontFamily: "'Open Sans', sans-serif",
+                fontWeight: 700, // Bold
+                margin: "20px auto",
+                maxWidth: "800px",
+              }}
+            >
+              Добро пожаловать на платформу buildingSmart Kazakhstan
+            </h1>
+            <p
+              style={{
+                textAlign: "justify",
+                color: "#333333",
+                fontFamily: "'Open Sans', sans-serif",
+                fontWeight: 400, // Regular
+                lineHeight: "1.6",
+                maxWidth: "800px",
+                margin: "0 auto",
+                padding: "20px",
+                borderRadius: "8px",
+              }}
+            >
+              Добро пожаловать на образовательную платформу по информационному моделированию buildingSmart Kazakhstan для
+              специалистов строительной отрасли!
+              <br />
+              Здесь вы найдете курсы, разработанные с учетом практических задач и требований современного строительства.
+              <br />
+              Осваивайте инструменты BIM, повышайте квалификацию и внедряйте цифровые технологии на всех этапах
+              жизненного цикла объекта - от проектирования до эксплуатации.
+              <br />
+              <br />
+              Платформа создана для тех, кто хочет работать эффективно, точно и в соответствии с актуальными стандартами
+              и технологиями.
+              <br />
+            </p>
+          </div>
+        </Container>
       </Box>
-    
     </ThemeProvider>
   );
-
 }

@@ -26,24 +26,19 @@ import jwtDecode from "jwt-decode";
 // Создаем тему (без изменений)
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#10b981",
-      contrastText: "#fff",
+    primary: { main: "#009eb0",  //бирюзовый
+      contrastText: "#fff" },
+    secondary: { main: "#009eb0",
+
+     },
+
+    background: { default: "#1f2937", 
+      paper: "#1c1c1b" //черный
     },
-    secondary: {
-      main: "#3b82f6",
-    },
-    background: {
-      default: "#1f2937",
-      paper: "#374151",
-    },
-    text: {
-      primary: "#fff",
-      secondary: "#d1d5db",
-    },
+    text: { primary: "#fff", secondary: "#d1d5db" },
   },
   typography: {
-    fontFamily: "'Inter', 'Roboto', sans-serif",
+    fontFamily: "'Open Sans', sans-serif",
     h4: { fontWeight: 600 },
     h6: { fontWeight: 500 },
     body2: { fontWeight: 400 },
@@ -59,21 +54,22 @@ const theme = createTheme({
         },
       },
     },
-    MuiTextField: {
+    MuiCard: {
       styleOverrides: {
         root: {
-          "& .MuiOutlinedInput-root": {
-            borderRadius: "8px",
-            borderColor: "#4b5563",
-            "&:hover fieldset": {
-              borderColor: "#10b981",
-            },
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+          transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)",
           },
         },
       },
     },
   },
 });
+
 
 const ProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -267,15 +263,21 @@ const ProfilePage = () => {
   return (
     <ThemeProvider theme={theme}>
       <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
-      <Box
-        sx={{
-          bgcolor: theme.palette.background.default,
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+     
+
+         <Box
+                             sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                               bgcolor: theme.palette.background.default,
+                               minHeight: "100vh",
+                               backgroundImage: `url(/background.jpg)`, // Исправлено "backgound" на "background"
+                               backgroundSize: "cover",
+                               backgroundPosition: "center",
+                               backgroundRepeat: "no-repeat",
+                             }}
+                           >
         <Box
           sx={{
             bgcolor: theme.palette.background.paper,

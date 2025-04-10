@@ -19,6 +19,8 @@ import {
   IconButton,
   Paper,
   CircularProgress,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
@@ -41,6 +43,7 @@ export default function LessonsPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState({ blocks: [] });
   const [courseId, setCourseId] = useState("");
+  const [isReviewLesson, setIsReviewLesson] = useState(false); // Новое состояние для галочки
   const [editingLesson, setEditingLesson] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -118,7 +121,6 @@ export default function LessonsPage() {
           import("@editorjs/image").then((mod) => mod.default),
         ]);
 
-        // Уничтожаем предыдущий экземпляр, если он существует
         if (editorInstance.current?.destroy) {
           await editorInstance.current.destroy();
         }
@@ -138,13 +140,13 @@ export default function LessonsPage() {
               class: ImageTool,
               config: {
                 uploader: {
-                  uploadByFile: uploadImageByFile, // Загрузка через файл
+                  uploadByFile: uploadImageByFile,
                 },
               },
             },
           },
           placeholder: "Введите содержимое урока...",
-          data: content, // Используем текущее состояние content
+          data: content,
           onChange: async () => {
             const savedData = await editor.save();
             setContent(savedData);
@@ -177,8 +179,11 @@ export default function LessonsPage() {
         ? JSON.parse(currentLesson.content)
         : { blocks: [] };
 
-      setContent(parsedContent); // Обновляем состояние content
-      await editorInstance.current.render(parsedContent); // Рендерим данные в редактор
+      setTitle(currentLesson.title);
+      setCourseId(currentLesson.course_id.toString());
+      setIsReviewLesson(currentLesson.isReviewLesson || false); // Устанавливаем значение галочки
+      setContent(parsedContent);
+      await editorInstance.current.render(parsedContent);
     };
 
     loadLessonData();
@@ -229,6 +234,7 @@ export default function LessonsPage() {
     if (lesson) {
       setTitle(lesson.title);
       setCourseId(lesson.course_id.toString());
+      setIsReviewLesson(lesson.isReviewLesson || false); // Устанавливаем значение галочки
       setContent(lesson.content ? JSON.parse(lesson.content) : { blocks: [] });
       setEditingLesson(lessonId);
     }
@@ -261,8 +267,9 @@ export default function LessonsPage() {
       setIsLoading(true);
       const requestData = {
         title,
-        content: JSON.stringify(savedContent), // Используем свежие данные из редактора
+        content: JSON.stringify(savedContent),
         course_id: Number(courseId),
+        isReviewLesson, // Добавляем поле isReviewLesson
       };
 
       if (editingLesson) {
@@ -292,6 +299,7 @@ export default function LessonsPage() {
     setTitle("");
     setContent({ blocks: [] });
     setCourseId("");
+    setIsReviewLesson(false); // Сбрасываем галочку
     setEditingLesson(null);
 
     if (editorInstance.current?.render) {
@@ -305,29 +313,6 @@ export default function LessonsPage() {
     localStorage.removeItem("token");
     router.push("/login");
   };
-
-  // Удаляем кнопку, так как загрузка изображения теперь через тулбар Editor.js
-  // const handleImageUpload = () => {
-  //   const input = document.createElement('input');
-  //   input.type = 'file';
-  //   input.accept = 'image/*';
-  //   input.onchange = async (e) => {
-  //     const file = e.target.files[0];
-  //     if (file) {
-  //       const result = await uploadImageByFile(file);
-  //       if (result.success === 1 && editorInstance.current) {
-  //         editorInstance.current.blocks.insert('image', {
-  //           file: { url: result.file.url },
-  //           caption: '',
-  //           withBorder: false,
-  //           stretched: false,
-  //           withBackground: false,
-  //         });
-  //       }
-  //     }
-  //   };
-  //   input.click();
-  // };
 
   if (!token) return <Typography>Токен отсутствует</Typography>;
 
@@ -358,6 +343,18 @@ export default function LessonsPage() {
               ))}
             </Select>
           </FormControl>
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isReviewLesson}
+                onChange={(e) => setIsReviewLesson(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Урок для отзыва"
+            sx={{ mb: 2 }}
+          />
 
           <div id="editorjs-container" style={{ minHeight: "300px", border: "1px solid #ccc", borderRadius: "4px", padding: "10px" }} />
 
@@ -398,7 +395,7 @@ export default function LessonsPage() {
               >
                 <ListItemText
                   primary={lesson.title}
-                  secondary={`Курс: ${courses.find((c) => c.id === lesson.course_id)?.title || "Неизвестный курс"}`}
+                  secondary={`Курс: ${courses.find((c) => c.id === lesson.course_id)?.title || "Неизвестный курс"} ${lesson.isReviewLesson ? "(Отзыв)" : ""}`}
                 />
               </ListItem>
             ))}

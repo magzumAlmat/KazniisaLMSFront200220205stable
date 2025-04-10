@@ -118,8 +118,16 @@ ul li a{
     padding-bottom: 0px!important;
 }
 
-
-
-  .ce-toolbar__actions{
+/* #review-editor-container{ right: 130%! important;} */
+.review{right: 130%! important;}
+  /* .ce-toolbar__actions{
     right: 111%;
-  }
+    
+  } */
+
+  .ce-toolbar__content {
+    max-width: none;
+    margin: 0 auto;
+    position: relative;
+}
+  

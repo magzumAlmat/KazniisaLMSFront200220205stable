@@ -676,3 +676,18 @@ export default function Layout({ children }) {
     // </Box>
   );
 }
+
+
+
+
+
+  <Box
+        sx={{
+          bgcolor: theme.palette.background.default,
+          minHeight: "100vh",
+          backgroundImage: `url(/background.jpg)`, // Исправлено "backgound" на "background"
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      ></Box>

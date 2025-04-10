@@ -34,9 +34,11 @@ export default function ResetPasswordForm() {
   return (
     <Box sx={{ p: 4, maxWidth: 600, mx: "auto", mt: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
+        
         <Typography variant="h5" gutterBottom>
           Сброс пароля
         </Typography>
+
         <form onSubmit={handleSubmit}>
           <TextField
             label="Новый пароль"

@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import {
@@ -13,12 +12,76 @@ import {
   IconButton,
   Box,
 } from "@mui/material";
-import Link from "next/link";
+import Link from "next/link"
 import MenuIcon from "@mui/icons-material/Menu";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import Image from 'next/image'
-import { Bolt } from "@mui/icons-material";
+import Image from "next/image";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+// Создаем тему
+const theme = createTheme({
+  palette: {
+    primary: { main: "#009eb0", contrastText: "#fff" }, // Бирюзовый
+    secondary: { main: "#1e3a8a", contrastText: "#fff" }, // Глубокий синий
+    background: {
+      default: "linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)",
+      paper: "#ffffff",
+    },
+    text: { primary: "#1e293b", secondary: "#64748b" },
+  },
+  typography: {
+    fontFamily: "'Open Sans', sans-serif",
+    h6: { fontWeight: 700, letterSpacing: "-0.2px" },
+    button: { fontWeight: 600, letterSpacing: "0.5px" },
+    body1: { fontWeight: 400 },
+  },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent", // Прозрачный фон
+          boxShadow: "none", // Убираем тень для минимализма
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          borderRadius: "8px",
+          padding: "8px 16px",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            transform: "translateY(-2px)",
+            boxShadow: "0 4px 12px rgba(0, 158, 176, 0.3)",
+          },
+        },
+      },
+    },
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          background: "#ffffff",
+          borderLeft: "2px solid #009eb0",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+        },
+      },
+    },
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          transition: "all 0.2s ease",
+          "&:hover": {
+            backgroundColor: "rgba(0, 158, 176, 0.1)",
+            transform: "translateX(4px)",
+          },
+        },
+      },
+    },
+  },
+});
+
 const TopMenu = ({ userInfo, handleLogout }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t, ready } = useTranslation();
@@ -72,11 +135,20 @@ const TopMenu = ({ userInfo, handleLogout }) => {
 
   const drawerMenu = (
     <Box
-      sx={{ width: 250 }}
+      sx={{
+        width: 250,
+        p: 2,
+      }}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
+      <Typography
+        variant="h6"
+        sx={{ color: "primary.main", fontWeight: 700, mb: 2, textAlign: "center" }}
+      >
+        {t("title")}
+      </Typography>
       <List>
         {renderMenuByRole().map((item, index) => (
           <ListItem
@@ -84,62 +156,50 @@ const TopMenu = ({ userInfo, handleLogout }) => {
             component={item.href ? Link : "button"}
             href={item.href}
             onClick={item.onClick}
-            sx={{ color: "#235dff" }}
+            sx={{
+              color: "text.primary",
+              py: 1.5,
+              "&:hover": {
+                color: "primary.main",
+              },
+            }}
           >
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
       </List>
+      <Box sx={{ mt: 2, textAlign: "center" }}>
+        <LanguageSwitcher />
+      </Box>
     </Box>
   );
 
   if (!ready) {
-    return <div>Loading translations...</div>; // Показываем загрузку, пока переводы не готовы
+    return <div>Loading translations...</div>;
   }
 
   return (
-    <>
-    <AppBar
-        position="static"
-        sx={{
-          backgroundColor: "transparent", // Прозрачный фон для AppBar
-          boxShadow: "none", // Убираем тень, если нужно
-        }}
-      >
+    <ThemeProvider theme={theme}>
+      <AppBar position="static">
         <Toolbar
           sx={{
-            flexWrap: "wrap",
-            justifyContent: { xs: "space-between", sm: "space-between" },
             py: { xs: 1, sm: 2 },
-            backgroundColor: "transparent", // Прозрачный фон для Toolbar
+            justifyContent: "space-between",
           }}
         >
-        
-          {/* <Typography
-            variant="h6"
-            component="div"
-            sx={{
-              fontWeight: "bold",
-              color: "#fff",
-              fontSize: { xs: "1rem", sm: "1.25rem" },
-            }}
-          >
-            {t("title")}
-          </Typography> */}
-         <div style={{ position: 'relative', width: '20%', aspectRatio: '5 / 1' }}>
+          <Box sx={{ position: "relative", width: { xs: "30%", sm: "20%" }, aspectRatio: "5 / 1" }}>
             <Image
               src="/logo.png"
               fill
-              style={{ objectFit: 'contain' }}
-              alt="Picture of the author"
+              style={{ objectFit: "contain" }}
+              alt="Logo"
             />
-          </div>
+          </Box>
 
           <Box
             sx={{
               display: { xs: "none", sm: "flex" },
               gap: { xs: 1, sm: 2, md: 3 },
-              flexWrap: "wrap",
               alignItems: "center",
             }}
           >
@@ -150,163 +210,43 @@ const TopMenu = ({ userInfo, handleLogout }) => {
                 component={item.href ? Link : "button"}
                 href={item.href}
                 onClick={item.onClick}
-               
                 sx={{
-                  fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1.2rem" },
+                  fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" },
                   px: { xs: 1, sm: 2 },
-                  minWidth: "auto",
-                  color: "#235dff", 
-                  fontWeight: "bold",
+                  color: "#1e293b", // Темный текст для контраста с фоном страницы
+                  "&:hover": {
+                    color: "#009eb0", // Бирюзовый при наведении
+                  },
                 }}
-                style={{ fontFamily: "Open Sans",}}
               >
                 {item.text}
               </Button>
             ))}
             <LanguageSwitcher />
           </Box>
+
           <IconButton
             edge="end"
-            color="inherit"
             aria-label="menu"
             onClick={toggleDrawer(true)}
-            sx={{ display: { xs: "block", sm: "none" } }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              color: "#1e293b", // Темный цвет для контраста
+              "&:hover": {
+                bgcolor: "rgba(0, 158, 176, 0.2)",
+              },
+            }}
           >
             <MenuIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
+
       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <Box sx={{ p: 2 }}>
-          <h1>{t("title")}</h1>
-          <p>{t("welcome")}</p>
-          {drawerMenu}
-          <LanguageSwitcher />
-        </Box>
+        {drawerMenu}
       </Drawer>
-    </>
+    </ThemeProvider>
   );
 };
 
-// =======
-// "use client";
-// import React, { useState } from "react";
-// import {
-//   AppBar,
-//   Toolbar,
-//   Typography,
-//   Button,
-//   Drawer,
-//   List,
-//   ListItem,
-//   ListItemText,
-//   IconButton,
-//   Box,
-// } from "@mui/material";
-// import Link from "next/link";
-// import MenuIcon from "@mui/icons-material/Menu";
-
-// const TopMenu = ({ userInfo, handleLogout }) => {
-//   const [drawerOpen, setDrawerOpen] = useState(false);
-
-//   const renderMenuByRole = () => {
-//     if (!userInfo) return [];
-
-//     const menuItems = {
-//       1: [
-//         { text: "Главная", href: "/layout" },
-//         { text: "Добавить роль", href: "/addrole" },
-//         { text: "Профиль", href: "/profile" },
-//         { text: "Выйти", onClick: handleLogout },
-//       ],
-//       2: [
-//         { text: "Главная", href: "/layout" },
-//         { text: "Потоки", href: "/addstreams" },
-//         { text: "Курсы", href: "/addcourse" },
-//         { text: "Предметы", href: "/addlessons" },
-//         { text: "Материалы", href: "/addmaterial" },
-//         { text: "Прогресс", href: "/progressstatus" },
-//         { text: "Профиль", href: "/profile" },
-//         { text: "Выйти", onClick: handleLogout },
-//       ],
-//       3: [
-//         { text: "Главная", href: "/layout" },
-//         { text: "Курсы", href: "/courses" },
-//         { text: "Профиль", href: "/profile" },
-//         { text: "Выйти", onClick: handleLogout },
-//       ],
-//     };
-
-//     return menuItems[userInfo.roleId] || [
-//       { text: "Главная", href: "/notauth" },
-//       { text: "Профиль", href: "/profile" },
-//       { text: "Выйти", onClick: handleLogout },
-//     ];
-//   };
-
-//   const toggleDrawer = (open) => (event) => {
-//     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
-//       return;
-//     }
-//     setDrawerOpen(open);
-//   };
-
-//   const drawerMenu = (
-//     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
-//       <List>
-//         {renderMenuByRole().map((item, index) => (
-//           <ListItem
-//             key={index}
-//             component={item.href ? Link : "button"}
-//             href={item.href}
-//             onClick={item.onClick}
-//             sx={{ color: "#1976d2" }}
-//           >
-//             <ListItemText primary={item.text} />
-//           </ListItem>
-//         ))}
-//       </List>
-//     </Box>
-//   );
-
-//   return (
-//     <>
-//       <AppBar position="static" sx={{ bgcolor: "#374151", borderBottom: "2px solid #1565c0" }}>
-//         <Toolbar sx={{ flexWrap: "wrap", justifyContent: { xs: "space-between", sm: "space-between" }, py: { xs: 1, sm: 2 } }}>
-//           <Typography variant="h6" component="div" sx={{ fontWeight: "bold", color: "#fff", fontSize: { xs: "1rem", sm: "1.25rem" } }}>
-//             Kazniisa LMS
-//           </Typography>
-//           <Box sx={{ display: { xs: "none", sm: "flex" }, gap: { xs: 1, sm: 2, md: 3 }, flexWrap: "wrap" }}>
-//             {renderMenuByRole().map((item, index) => (
-//               <Button
-//                 key={index}
-//                 color="inherit"
-//                 component={item.href ? Link : "button"}
-//                 href={item.href}
-//                 onClick={item.onClick}
-//                 sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" }, px: { xs: 1, sm: 2 }, minWidth: "auto" }}
-//               >
-//                 {item.text}
-//               </Button>
-//             ))}
-//           </Box>
-//           <IconButton
-//             edge="end"
-//             color="inherit"
-//             aria-label="menu"
-//             onClick={toggleDrawer(true)}
-//             sx={{ display: { xs: "block", sm: "none" } }}
-//           >
-//             <MenuIcon />
-//           </IconButton>
-//         </Toolbar>
-//       </AppBar>
-//       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-//         {drawerMenu}
-//       </Drawer>
-//     </>
-//   );
-// };
-
-
- export default TopMenu;
+export default TopMenu;

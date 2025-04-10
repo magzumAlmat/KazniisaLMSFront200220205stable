@@ -13,9 +13,8 @@ import {
   Alert,
   createTheme,
   ThemeProvider,
-  Text
 } from "@mui/material";
-import { LockOutlined, Google as GoogleIcon } from "@mui/icons-material";
+import { LockOutlined } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { authorize, setError, logoutAction } from "../../store/slices/authSlice";
 import jwtDecode from "jwt-decode";
@@ -24,44 +23,60 @@ import axios from "axios";
 // Создаем тему
 const theme = createTheme({
   palette: {
-    primary: { main: "#009eb0",  //бирюзовый
-      contrastText: "#fff" },
-    secondary: { main: "#009eb0",
-
-     },
-
-    background: { default: "#657894", 
-      paper: "#0000" //черный
+    primary: { main: "#009eb0", contrastText: "#fff" }, // Бирюзовый
+    secondary: { main: "#1e3a8a", contrastText: "#fff" }, // Глубокий синий
+    background: {
+      default: "linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)", // Мягкий градиент фона
+      paper: "#ffffff", // Белый для формы
     },
-    text: { primary: "#fff", secondary: "#d1d5db" },
+    text: { primary: "#1e293b", secondary: "#64748b" }, // Темный текст для контраста
   },
   typography: {
     fontFamily: "'Open Sans', sans-serif",
-    h4: { fontWeight: 600 },
-    h6: { fontWeight: 500 },
+    h4: { fontWeight: 700, letterSpacing: "-0.5px" }, // Жирный заголовок
+    body1: { fontWeight: 400 },
     body2: { fontWeight: 400 },
+    button: { fontWeight: 600, letterSpacing: "0.5px" },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
           textTransform: "none",
-          borderRadius: "8px",
-          padding: "8px 16px",
-          transition: "all 0.2s ease-in-out",
+          borderRadius: "12px",
+          padding: "12px 24px",
+          boxShadow: "0 4px 14px rgba(0, 158, 176, 0.3)",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            transform: "translateY(-2px)",
+            boxShadow: "0 6px 20px rgba(0, 158, 176, 0.5)",
+          },
+          "&:disabled": {
+            opacity: 0.6,
+            boxShadow: "none",
+          },
         },
       },
     },
-    MuiCard: {
+    MuiTextField: {
       styleOverrides: {
         root: {
-          borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-          transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-          "&:hover": {
-            transform: "translateY(-4px)",
-            boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)",
+          "& .MuiOutlinedInput-root": {
+            borderRadius: "8px",
+            backgroundColor: "#f8fafc",
+            transition: "all 0.2s ease",
+            "&:hover fieldset": { borderColor: "#009eb0" },
+            "&.Mui-focused fieldset": { borderColor: "#009eb0" },
           },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: "16px",
+          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
+          border: "1px solid rgba(0, 158, 176, 0.2)",
         },
       },
     },
@@ -99,7 +114,7 @@ const LoginPage = () => {
         router.push("/login");
       }
     }
-  }, []);
+  }, [dispatch, router]);
 
   useEffect(() => {
     if (isAuth) {
@@ -130,166 +145,97 @@ const LoginPage = () => {
     <ThemeProvider theme={theme}>
       <Box
         sx={{
-          bgcolor: theme.palette.background.default,
           minHeight: "100vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          // backgroundColor:'white'
+          background: theme.palette.background.default,
+          position: "relative",
+          overflow: "hidden",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            top: "-50%",
+            left: "-50%",
+            width: "200%",
+            height: "200%",
+            background: "radial-gradient(circle, rgba(0, 158, 176, 0.1) 0%, transparent 70%)",
+            zIndex: 0,
+          },
         }}
       >
-        <Container
-          component="main"
-          maxWidth="xs"
-          sx={{
-            bgcolor: theme.palette.background.paper,
-            borderRadius: "12px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-            py: 6,
-            px: 4,
-          }}
-        >
+        <Container maxWidth="xs" sx={{ zIndex: 1 }}>
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              bgcolor: "background.paper",
+              p: 4,
+              borderRadius: "16px",
+              textAlign: "center",
             }}
           >
-            {/* Логотип */}
-            <LockOutlined
-              sx={{
-                fontSize: 40,
-                color: theme.palette.primary.main,
-                mb: 2,
-              }}
-            />
-
-            {/* Заголовок */}
-            <Typography
-              component="h1"
-              variant="h5"
-              sx={{
-                fontWeight: "bold",
-                color: theme.palette.text.primary,
-              }}
-            >
+            <LockOutlined sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
+            <Typography variant="h4" color="text.primary">
               Вход
             </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1, mb: 3 }}>
+              Войдите в свой аккаунт
+            </Typography>
 
-            {/* Сообщение об ошибке */}
             {(localError || reduxError) && (
-              <Alert
-                severity="error"
-                sx={{
-                  mt: 2,
-                  width: "100%",
-                  bgcolor: "#374151",
-                  color: "#ef4444",
-                  border: "1px solid #ef4444",
-                }}
-              >
+              <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
                 {localError || reduxError}
               </Alert>
             )}
 
-            {/* Форма */}
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{
-                mt: 3,
-                width: "100%",
-              }}
-            >
-                
-              <Grid container spacing={3}>
-                {/* Поле Email */}
-          
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
                 <Grid item xs={12}>
-                <p style={{color:"white"}}>Email</p>
                   <TextField
                     required
                     fullWidth
                     id="email"
-                    // label="Email"
+                    label="Email"
                     name="email"
                     autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    variant="outlined"
                   />
                 </Grid>
-
-                {/* Поле Пароль */}
                 <Grid item xs={12}>
-                <p style={{color:"white"}}>Пароль</p>
                   <TextField
                     required
                     fullWidth
                     name="password"
-                    // label="Пароль"
+                    label="Пароль"
                     type="password"
                     id="password"
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    variant="outlined"
                   />
                 </Grid>
               </Grid>
 
-              {/* Кнопки */}
-              <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                   
-                  }}
-                >
-                  Войти
-                </Button>
-                {/* <Button
-                  variant="contained"
-                
-                  onClick={() => (window.location.href = `${host}/api/auth/google`)}
-                  sx={{
-                    "&:hover": {
-                      bgcolor: "#059669", // Темнее синего
-                    },
-                  }}
-                >
-                  <GoogleIcon sx={{ bgcolor: "#059669",mr: 1 }} />
-                </Button> */}
-              </Stack>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Войти
+              </Button>
 
-              {/* Ссылки */}
-              <Grid container justifyContent="space-between" sx={{ mt: 3 }}>
+              <Grid container justifyContent="space-between" sx={{ mt: 2 }}>
                 <Grid item>
-                  <Link style={{color:"white"}}
-                    href="/forgotpassword"
-                    variant="body2"
-                    sx={{
-                      
-                      transition: "color 0.3s ease",
-                    }}
-                  >
+                  <Link href="/forgotpassword" variant="body2" sx={{ color: "secondary.main" }}>
                     Забыл пароль?
                   </Link>
                 </Grid>
                 <Grid item>
-                <Link style={{color:"white"}}
-                    href="/register"
-                    variant="body2"
-                    sx={{
-                      color: theme.palette.secondary.main,
-                      "&:hover": {
-                        color: theme.palette.primary.main,
-                      },
-                      transition: "color 0.3s ease",
-                    }}
-                  >
+                  <Link href="/register" variant="body2" sx={{ color: "secondary.main" }}>
                     Нет аккаунта? Зарегистрируйтесь
                   </Link>
                 </Grid>

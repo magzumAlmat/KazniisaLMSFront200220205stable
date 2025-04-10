@@ -3,80 +3,52 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCoursesAction, logoutAction } from "../../store/slices/authSlice";
 import {
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Typography,
-  Container,
-  Grid,
-  CircularProgress,
   Box,
+  Container,
+  Typography,
+  CircularProgress,
+  createTheme,
+  ThemeProvider,
+  Divider,
 } from "@mui/material";
-import Link from "next/link";
 import TopMenu from "../../components/topmenu";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Divider from '@mui/material/Divider';
+
+// Создаем тему
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#10b981", // Зеленый акцент (emerald-500)
-      contrastText: "#fff",
-    },
-    secondary: {
-      main: "#3b82f6", // Синий акцент (blue-500)
-    },
+    primary: { main: "#009eb0", contrastText: "#fff" }, // Бирюзовый
+    secondary: { main: "#1e3a8a", contrastText: "#fff" }, // Глубокий синий
     background: {
-      default: "#1f2937", // Темно-серый фон (gray-800)
-      paper: "#374151", // Чуть светлее для панелей (gray-700)
+      default: "linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)", // Мягкий градиент фона
+      paper: "#ffffff", // Белый для контента
     },
-    text: {
-      primary: "#fff",
-      secondary: "#d1d5db", // Светло-серый для текста (gray-300)
-    },
+    text: { primary: "#1e293b", secondary: "#64748b" }, // Темный текст для контраста
   },
   typography: {
-    fontFamily: "'Open Sans', 'Roboto', sans-serif", // Добавляем Open Sans в глобальную типографику
-    h4: { fontWeight: 600 },
-    h6: { fontWeight: 500 },
-    body2: { fontWeight: 400 },
+    fontFamily: "'Open Sans', sans-serif",
+    h2: { fontWeight: 700, letterSpacing: "-0.5px" }, // Основной заголовок
+    body1: { fontWeight: 400, lineHeight: 1.6 }, // Текст
   },
   components: {
-    MuiButton: {
+    MuiDivider: {
       styleOverrides: {
         root: {
-          textTransform: "none",
-          borderRadius: "8px",
-          padding: "8px 16px",
-          transition: "all 0.2s ease-in-out",
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-          transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-          "&:hover": {
-            transform: "translateY(-4px)",
-            boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)",
-          },
+          backgroundColor: "rgba(0, 158, 176, 0.3)",
+          margin: "16px 0",
         },
       },
     },
   },
 });
 
-export default function Courses() {
+export default function WelcomePage() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { courses, loadingCourses, coursesError } = useSelector((state) => state.auth);
   const isAuth = useSelector((state) => state.auth.isAuth);
   const [userInfo, setUserInfo] = useState(null);
-  const [progresses, setProgresses] = useState({});
   const [token, setToken] = useState(null);
   const host = process.env.NEXT_PUBLIC_HOST;
 
@@ -108,29 +80,6 @@ export default function Courses() {
       }
     }
   };
-
-  const fetchAllProgresses = async (userId, courseId) => {
-    try {
-      const response = await axios.get(`${host}/api/course/progress/${userId}/${courseId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = response.data.course_progress;
-      setProgresses((prev) => ({
-        ...prev,
-        [courseId]: data,
-      }));
-    } catch (error) {
-      console.error("Ошибка при получении прогресса:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (userInfo && courses && courses.length > 0 && token) {
-      courses.forEach((course) => {
-        fetchAllProgresses(userInfo.id, course.id);
-      });
-    }
-  }, [userInfo, courses, token]);
 
   const handleLogout = () => {
     dispatch(logoutAction());
@@ -178,51 +127,61 @@ export default function Courses() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+        
+          position: "relative",
+          overflow: "hidden",
+          backgroundImage: `url(/background.jpg)`,
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            top: "-50%",
+            left: "-50%",
+            width: "200%",
+            height: "200%",
+            background: "radial-gradient(circle, rgba(0, 158, 176, 0.1) 0%, transparent 70%)",
+            zIndex: 0,
+          },
         }}
       >
         <TopMenu userInfo={userInfo} handleLogout={handleLogout} />
-        <Divider/>
-        <Container>
-          <div>
-            <h1
-              style={{
-                textAlign: "center",
-                color: "#235dff ",
-                fontFamily: "'Open Sans', sans-serif",
-                fontWeight: 700, // Bold
-                margin: "20px auto",
-                maxWidth: "800px",
-              }}
+        <Divider />
+        <Container maxWidth="md" sx={{ zIndex: 1, py: 6 }}>
+          <Box
+            sx={{
+              bgcolor: "background.paper",
+              p: 4,
+              borderRadius: "16px",
+              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
+              border: "1px solid rgba(0, 158, 176, 0.2)",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              variant="h2"
+              color="text.primary"
+              sx={{ mb: 3, fontSize: { xs: "2rem", md: "3rem" } }}
             >
               Добро пожаловать на платформу buildingSmart Kazakhstan
-            </h1>
-            <p
-              style={{
-                textAlign: "justify",
-                color: "#333333",
-                fontFamily: "'Open Sans', sans-serif",
-                fontWeight: 400, // Regular
-                lineHeight: "1.6",
+            </Typography>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{
                 maxWidth: "800px",
-                margin: "0 auto",
-                padding: "20px",
-                borderRadius: "8px",
+                mx: "auto",
+                textAlign: "justify",
               }}
             >
               Добро пожаловать на образовательную платформу по информационному моделированию buildingSmart Kazakhstan для
-              специалистов строительной отрасли!
-              <br />
-              Здесь вы найдете курсы, разработанные с учетом практических задач и требований современного строительства.
+              специалистов строительной отрасли! <br />
+              Здесь вы найдете курсы, разработанные с учетом практических задач и требований современного строительства.{" "}
               <br />
               Осваивайте инструменты BIM, повышайте квалификацию и внедряйте цифровые технологии на всех этапах
-              жизненного цикла объекта - от проектирования до эксплуатации.
-              <br />
-              <br />
+              жизненного цикла объекта — от проектирования до эксплуатации. <br />
               Платформа создана для тех, кто хочет работать эффективно, точно и в соответствии с актуальными стандартами
               и технологиями.
-              <br />
-            </p>
-          </div>
+            </Typography>
+          </Box>
         </Container>
       </Box>
     </ThemeProvider>

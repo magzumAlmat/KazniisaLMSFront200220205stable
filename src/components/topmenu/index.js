@@ -18,6 +18,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import Image from 'next/image'
+import { Bolt } from "@mui/icons-material";
 const TopMenu = ({ userInfo, handleLogout }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t, ready } = useTranslation();
@@ -83,7 +84,7 @@ const TopMenu = ({ userInfo, handleLogout }) => {
             component={item.href ? Link : "button"}
             href={item.href}
             onClick={item.onClick}
-            sx={{ color: "#1976d2" }}
+            sx={{ color: "#235dff" }}
           >
             <ListItemText primary={item.text} />
           </ListItem>
@@ -133,6 +134,7 @@ const TopMenu = ({ userInfo, handleLogout }) => {
               alt="Picture of the author"
             />
           </div>
+
           <Box
             sx={{
               display: { xs: "none", sm: "flex" },
@@ -150,10 +152,11 @@ const TopMenu = ({ userInfo, handleLogout }) => {
                 onClick={item.onClick}
                
                 sx={{
-                  fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" },
+                  fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1.2rem" },
                   px: { xs: 1, sm: 2 },
                   minWidth: "auto",
-                  color: "#333333", // Темно-серый цвет для текста кнопок
+                  color: "#235dff", 
+                  fontWeight: "bold",
                 }}
                 style={{ fontFamily: "Open Sans",}}
               >

@@ -16,6 +16,7 @@ import {
   LinearProgress,
   useMediaQuery,
   Divider,
+  Container,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllCoursesAction, logoutAction } from "../../../store/slices/authSlice";
@@ -29,7 +30,7 @@ const theme = createTheme({
   palette: {
     primary: { main: "#009eb0", contrastText: "#fff" },
     secondary: { main: "#009eb0" },
-    background: { default: "#1f2937", paper: "#1c1c1b" },
+    background: { default: "#1f2937", paper: "#dbdedf" },
     text: { primary: "#fff", secondary: "#d1d5db" },
   },
   typography: {
@@ -349,7 +350,7 @@ export default function CourseDetail() {
               borderRight: isMobile ? 0 : 1,
               borderColor: "divider",
               width: { xs: "100%", sm: "280px" },
-              bgcolor: theme.palette.background.paper,
+              bgcolor: "#718093",
               maxHeight: { xs: "auto", sm: "calc(100vh - 64px)" },
               overflowY: "auto",
               flexShrink: 0,
@@ -363,7 +364,7 @@ export default function CourseDetail() {
                   textTransform: "none",
                   fontWeight: 500,
                   fontSize: { xs: "0.875rem", sm: "1rem" },
-                  color: theme.palette.text.secondary,
+                  color: "white",
                   "&.Mui-selected": { color: theme.palette.primary.main, bgcolor: "rgba(16, 185, 129, 0.1)" },
                   minHeight: { xs: 48, sm: 60 },
                   px: 3,
@@ -380,13 +381,17 @@ export default function CourseDetail() {
                 value={(getCompletedLessonsCount() / filteredLessons.length) * 100 || 0}
                 sx={{ mb: 2, height: 8, borderRadius: 4, bgcolor: "#4b5563", "& .MuiLinearProgress-bar": { bgcolor: theme.palette.primary.main } }}
               />
+                <div style={{backgroundColor:" #9f3588",width:'  max-content'}}>
               <Typography variant="subtitle1" sx={{ color: theme.palette.text.secondary, fontSize: { xs: "0.875rem", sm: "1rem" }, mb: 3 }}>
                 Пройдено {getCompletedLessonsCount()} из {filteredLessons.length} уроков
               </Typography>
+              </div>
 
+              <div style={{backgroundColor:" #9f3588",width:'  max-content'}}>
               <Typography variant="h6" sx={{ color: theme.palette.text.primary, fontSize: { xs: "1.5rem", sm: "1.75rem" }, mb: 3 }}>
                 {filteredLessons[activeTab].title}
               </Typography>
+              </div>
 
               {filteredLessons[activeTab].image && (
                 <Box
@@ -411,9 +416,11 @@ export default function CourseDetail() {
               </Box>
               <Divider sx={{ my: 3, bgcolor: theme.palette.divider }} />
 
+              <div style={{backgroundColor:" #9f3588",width:'  max-content'}}>
               <Typography variant="h5" sx={{ color: theme.palette.text.primary, fontSize: { xs: "1.25rem", sm: "1.5rem" }, mb: 2 }}>
                 Видео-материалы:
               </Typography>
+            
               {videoMaterials.length > 0 ? (
                 videoMaterials.map((material) => (
                   <Box key={material.material_id} sx={{ mb: 3 }}>
@@ -423,7 +430,9 @@ export default function CourseDetail() {
               ) : (
                 <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>Нет доступных видео.</Typography>
               )}
+              </div>
 
+              <div style={{backgroundColor:" #9f3588",width:'  max-content'}}>
               <Typography variant="h5" sx={{ color: theme.palette.text.primary, fontSize: { xs: "1.25rem", sm: "1.5rem" }, mt: 4, mb: 2 }}>
                 Дополнительные материалы:
               </Typography>
@@ -503,6 +512,7 @@ export default function CourseDetail() {
                 <Typography sx={{ color: theme.palette.text.secondary, fontSize: "1rem" }}>Нет доступных материалов.</Typography>
               )}
 
+            </div>
               <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, justifyContent: "flex-end", gap: 2, mt: 4 }}>
                 <Button
                   variant="contained"

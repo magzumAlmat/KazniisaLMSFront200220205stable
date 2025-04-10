@@ -3,9 +3,55 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { createUserAction, createTeacherAction } from '../../store/slices/authSlice';
-import { Container, Typography, TextField, Button, Box, Link, Grid, Snackbar, Alert } from '@mui/material';
+import { Container, Typography, TextField, Button, Box, Link, Grid, Snackbar, Alert ,createTheme,ThemeProvider} from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import Checkbox from '@mui/material/Checkbox';
+
+const theme = createTheme({
+  palette: {
+    primary: { main: "#009eb0",  //бирюзовый
+      contrastText: "#fff" },
+    secondary: { main: "#009eb0",
+
+     },
+
+    background: { default: "#657894", 
+      paper: "#0000" //черный
+    },
+    text: { primary: "#fff", secondary: "#d1d5db" },
+  },
+  typography: {
+    fontFamily: "'Open Sans', sans-serif",
+    h4: { fontWeight: 600 },
+    h6: { fontWeight: 500 },
+    body2: { fontWeight: 400 },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          borderRadius: "8px",
+          padding: "8px 16px",
+          transition: "all 0.2s ease-in-out",
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+          transition: "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)",
+          },
+        },
+      },
+    },
+  },
+});
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -59,7 +105,21 @@ const RegisterPage = () => {
     setOpenSnackbar(false);
   };
 
+
+
+  
   return (
+      <ThemeProvider theme={theme}>
+        <Box
+                sx={{
+                  bgcolor: theme.palette.background.default,
+                  minHeight: "100vh",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  // backgroundColor:'white'
+                }}
+              >
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
@@ -70,7 +130,7 @@ const RegisterPage = () => {
         }}
       >
         <LockOutlined sx={{ fontSize: 40, color: 'primary.main' }} />
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" style={{color:'white'}}>
           Регистрация
         </Typography>
         <br />
@@ -133,7 +193,7 @@ const RegisterPage = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
+              <Link href="/login" variant="body2" style={{color:'white'}}>
                 Уже есть аккаунт? Войдите
               </Link>
             </Grid>
@@ -147,6 +207,8 @@ const RegisterPage = () => {
         </Alert>
       </Snackbar>
     </Container>
+    </Box>
+    </ThemeProvider>
   );
 };
 

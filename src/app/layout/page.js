@@ -187,7 +187,7 @@ export default function Courses() {
             <h1
               style={{
                 textAlign: "center",
-                color: "#333333",
+                color: "#235dff ",
                 fontFamily: "'Open Sans', sans-serif",
                 fontWeight: 700, // Bold
                 margin: "20px auto",

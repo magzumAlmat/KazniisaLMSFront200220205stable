@@ -31,7 +31,7 @@ const theme = createTheme({
      },
 
     background: { default: "#1f2937", 
-      paper: "#1c1c1b" //черный
+      paper: "#657894" //черный
     },
     text: { primary: "#fff", secondary: "#d1d5db" },
   },
@@ -216,7 +216,7 @@ export default function ClientCourses() {
             variant="h4"
             gutterBottom
             sx={{
-              color: "#333333",
+              color: "   #235dff",
               fontFamily: "'Open Sans', sans-serif",
               textAlign: "center",
               mb: { xs: 4, sm: 6 },
@@ -240,6 +240,7 @@ export default function ClientCourses() {
                       flexDirection: "column",
                       bgcolor: "background.paper",
                       border: `1px solid ${theme.palette.primary.main}`,
+                      color:'#657894'
                     }}
                   >
                     <CardContent sx={{ flexGrow: 1, p: 3 }}>
@@ -247,7 +248,7 @@ export default function ClientCourses() {
                         variant="h6"
                         component="div"
                         gutterBottom
-                        sx={{ color: "text.primary", fontSize: { xs: "1.125rem", sm: "1.25rem" } }}
+                        sx={{ color: "text.primary", fontSize: { xs: "1.125rem", sm: "1.25rem" } ,}}
                       >
                         {course.title}
                       </Typography>

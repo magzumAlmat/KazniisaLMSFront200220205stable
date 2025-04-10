@@ -126,21 +126,94 @@ a {
 .btn-custom:hover {
   background-color: #0056b3;
 }
-
-@media (max-width: 768px) {
+@media (min-width: 576px) {
   .profile-container {
-    padding: 10px;
+      padding: 0.625rem;
   }
-
   .profile-card {
-    margin-bottom: 20px;
+      margin-bottom: 1.25rem;
   }
-
   .info-item {
-    font-size: 14px;
+      font-size: 0.8125rem;
   }
+  h1 { font-size: 1.75rem; }
+  p { font-size: 0.9375rem; }
+}
 
-  .btn-custom {
-    width: 100%;
+/* Средние устройства (768px и выше) */
+@media (min-width: 768px) {
+  .profile-container {
+      padding: 0.9375rem;
   }
+  .profile-card {
+      margin-bottom: 1.5625rem;
+  }
+  .info-item {
+      font-size: 0.875rem;
+  }
+  h1 { font-size: 2rem; }
+  p { font-size: 1rem; }
+}
+
+/* Планшеты и небольшие ноутбуки (1024px и выше) */
+@media (min-width: 1024px) {
+  .profile-container {
+      padding: 1.25rem;
+  }
+  .profile-card {
+      margin-bottom: 1.875rem;
+  }
+  .info-item {
+      font-size: 0.9375rem;
+  }
+  .btn-custom {
+      width: auto;
+  }
+  h1 { font-size: 2.25rem; }
+  p { font-size: 1rem; }
+}
+
+/* Десктопы (1280px и выше) */
+@media (min-width: 1280px) {
+  .profile-container {
+      padding: 1.5625rem;
+  }
+  .profile-card {
+      margin-bottom: 2.1875rem;
+  }
+  .info-item {
+      font-size: 1rem;
+  }
+  h1 { font-size: 2.5rem; }
+  p { font-size: 1.0625rem; }
+}
+
+/* Большие десктопы (1600px и выше) */
+@media (min-width: 1600px) {
+  .profile-container {
+      padding: 1.875rem;
+  }
+  .profile-card {
+      margin-bottom: 2.5rem;
+  }
+  .info-item {
+      font-size: 1.0625rem;
+  }
+  h1 { font-size: 2.75rem; }
+  p { font-size: 1.125rem; }
+}
+
+/* Максимальное разрешение до 1920px */
+@media (min-width: 1920px) {
+  .profile-container {
+      padding: 2.1875rem;
+  }
+  .profile-card {
+      margin-bottom: 2.8125rem;
+  }
+  .info-item {
+      font-size: 1.125rem;
+  }
+  h1 { font-size: 3rem; }
+  p { font-size: 1.125rem; }
 }

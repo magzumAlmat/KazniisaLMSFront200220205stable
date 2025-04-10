@@ -13,6 +13,7 @@ import {
   Alert,
   createTheme,
   ThemeProvider,
+  Text
 } from "@mui/material";
 import { LockOutlined, Google as GoogleIcon } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +30,7 @@ const theme = createTheme({
 
      },
 
-    background: { default: "#1f2937", 
+    background: { default: "#657894", 
       paper: "#0000" //черный
     },
     text: { primary: "#fff", secondary: "#d1d5db" },
@@ -201,14 +202,17 @@ const LoginPage = () => {
                 width: "100%",
               }}
             >
+                
               <Grid container spacing={3}>
                 {/* Поле Email */}
+          
                 <Grid item xs={12}>
+                <p style={{color:"white"}}>Email</p>
                   <TextField
                     required
                     fullWidth
                     id="email"
-                    label="Email"
+                    // label="Email"
                     name="email"
                     autoComplete="email"
                     value={email}
@@ -218,11 +222,12 @@ const LoginPage = () => {
 
                 {/* Поле Пароль */}
                 <Grid item xs={12}>
+                <p style={{color:"white"}}>Пароль</p>
                   <TextField
                     required
                     fullWidth
                     name="password"
-                    label="Пароль"
+                    // label="Пароль"
                     type="password"
                     id="password"
                     autoComplete="current-password"
@@ -240,9 +245,7 @@ const LoginPage = () => {
                   variant="contained"
                   color="primary"
                   sx={{
-                    "&:hover": {
-                      bgcolor: "#059669", // Темнее зеленого
-                    },
+                   
                   }}
                 >
                   Войти
@@ -264,14 +267,11 @@ const LoginPage = () => {
               {/* Ссылки */}
               <Grid container justifyContent="space-between" sx={{ mt: 3 }}>
                 <Grid item>
-                  <Link
+                  <Link style={{color:"white"}}
                     href="/forgotpassword"
                     variant="body2"
                     sx={{
-                      color: theme.palette.secondary.main,
-                      "&:hover": {
-                        color: theme.palette.primary.main,
-                      },
+                      
                       transition: "color 0.3s ease",
                     }}
                   >
@@ -279,7 +279,7 @@ const LoginPage = () => {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link
+                <Link style={{color:"white"}}
                     href="/register"
                     variant="body2"
                     sx={{

@@ -109,6 +109,8 @@ const TopMenu = ({ userInfo, handleLogout }) => {
       3: [
         { text: t("topMenu.home"), href: "/layout" },
         { text: t("topMenu.courses"), href: "/courses" },
+        { text: t("topMenu.documentLibrary"), href: "/documentlibrary"},
+        
         { text: t("topMenu.profile"), href: "/profile" },
         { text: t("topMenu.logout"), onClick: handleLogout },
       ],

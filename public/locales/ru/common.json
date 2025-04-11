@@ -11,7 +11,8 @@
     "lessons": "Уроки",
     "materials": "Материалы",
     "progress": "Прогресс",
-    "notAuth": "Не авторизован"
+    "notAuth": "Не авторизован",
+    "documentLibrary":"Библиотека документов"
   },
   "courses": {
     "title": "Доступные курсы",

@@ -12,29 +12,48 @@ export default function ResetPasswordForm() {
   const [message, setMessage] = useState("");
   const host = process.env.NEXT_PUBLIC_HOST;
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (password !== confirmPassword) {
+  //     setMessage("Пароли не совпадают");
+  //     return;
+  //   }
+
+  //   try {
+  //     await axios.post(`${host}/api/auth/reset-password`, {
+  //       token,
+  //       newPassword: password,
+  //     });
+  //     setMessage("Пароль успешно сброшен");
+  //   } catch (error) {
+  //     setMessage("Ошибка при сбросе пароля");
+  //     console.error(error);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage("Пароли не совпадают");
       return;
     }
-
+  
     try {
-      await axios.post(`${host}/api/auth/reset-password`, {
+      const response = await axios.post(`${host}/api/auth/reset-password`, {
         token,
         newPassword: password,
       });
-      setMessage("Пароль успешно сброшен");
+      setMessage(response.data.message);
     } catch (error) {
-      setMessage("Ошибка при сбросе пароля");
-      console.error(error);
+      setMessage(error.response?.data?.error || "Ошибка при сбросе пароля");
+      console.error("Reset password error:", error.response || error);
     }
   };
-
+  
   return (
     <Box sx={{ p: 4, maxWidth: 600, mx: "auto", mt: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
-        
+
         <Typography variant="h5" gutterBottom>
           Сброс пароля
         </Typography>

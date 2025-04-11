@@ -39,7 +39,7 @@ export default function ResetPasswordForm() {
     }
   
     try {
-      const response = await axios.post(`${host}/api/auth/reset-password`, {
+      const response = await axios.post(`${host}/api/reset-password`, {
         token,
         newPassword: password,
       });
@@ -49,7 +49,7 @@ export default function ResetPasswordForm() {
       console.error("Reset password error:", error.response || error);
     }
   };
-  
+
   return (
     <Box sx={{ p: 4, maxWidth: 600, mx: "auto", mt: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>

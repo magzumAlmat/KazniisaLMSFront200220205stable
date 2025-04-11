@@ -150,7 +150,7 @@ export default function UserProgressPage() {
   const handleDownloadReviews = async () => {
     try {
       const response = await axios({
-        url: 'http://localhost:4000/api/export-reviews', // Указанный URL
+        url: `${process.env.NEXT_PUBLIC_HOST}/api/export-reviews`, // Указанный URL
         method: 'GET',
         responseType: 'blob', // Ожидаем бинарные данные
         headers: {

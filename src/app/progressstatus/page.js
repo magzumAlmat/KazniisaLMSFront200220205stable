@@ -25,7 +25,7 @@ import jwtDecode from "jwt-decode";
 export default function UserProgressPage() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [token, setToken] = useState(null); // Инициализируем token как null
+  const [token, setToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -35,24 +35,24 @@ export default function UserProgressPage() {
   const [error, setError] = useState(null);
   const { courses } = useSelector((state) => state.auth);
   const host = process.env.NEXT_PUBLIC_HOST;
-  
+
   useEffect(() => {
     const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     console.log("Stored token:", storedToken);
 
     if (!storedToken) {
       console.error("Token not available");
-       router.push("/login");
+      router.push("/login");
       return;
     }
 
     try {
       const decodedToken = jwtDecode(storedToken);
       console.log("Decoded token:", decodedToken);
-      setToken(storedToken); // Устанавливаем токен только после успешного декодирования
+      setToken(storedToken);
     } catch (error) {
       console.error("Invalid token:", error.message);
-      localStorage.removeItem("token"); // Удаляем некорректный токен
+      localStorage.removeItem("token");
       router.push("/login");
     }
   }, [router]);
@@ -60,6 +60,7 @@ export default function UserProgressPage() {
   // Загрузка пользователей и курсов
   useEffect(() => {
     const fetchInitialData = async () => {
+      if (!token) return; // Ждем, пока токен будет установлен
       try {
         const usersResponse = await axios.get(`${host}/api/getallusers`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -82,7 +83,7 @@ export default function UserProgressPage() {
 
   // Итеративная загрузка прогресса
   useEffect(() => {
-    if (users.length && courses.length) {
+    if (users.length && courses.length && token) {
       const fetchAllProgress = async () => {
         setLoading(true);
         setError(null);
@@ -131,6 +132,7 @@ export default function UserProgressPage() {
   }, [users, courses, token]);
 
   const fetchUserInfo = async () => {
+    if (!token) return;
     try {
       const response = await axios.get(`${host}/api/auth/getAuthentificatedUserInfo`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -141,6 +143,36 @@ export default function UserProgressPage() {
       if (error.response && error.response.status === 401) {
         router.push("/login");
       }
+    }
+  };
+
+  // Функция для скачивания Excel-файла с отзывами
+  const handleDownloadReviews = async () => {
+    try {
+      const response = await axios({
+        url: 'http://localhost:4000/api/export-reviews', // Указанный URL
+        method: 'GET',
+        responseType: 'blob', // Ожидаем бинарные данные
+        headers: {
+          Authorization: `Bearer ${token}`, // Передаем токен для авторизации
+        },
+      });
+
+      // Создаем Blob и инициируем скачивание
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'User_Reviews.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Ошибка при скачивании файла:', error);
+      setError('Не удалось скачать файл с отзывами');
     }
   };
 
@@ -191,6 +223,18 @@ export default function UserProgressPage() {
         <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", mb: 4 }}>
           Анализ прогресса пользователей
         </Typography>
+
+        {/* Кнопка для скачивания отзывов */}
+        <Box sx={{ mb: 3 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleDownloadReviews}
+            sx={{ textTransform: "none", mr: 2 }}
+          >
+            Скачать отзывы в Excel
+          </Button>
+        </Box>
 
         {/* Поисковое поле */}
         <Box sx={{ mb: 3 }}>

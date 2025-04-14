@@ -1141,7 +1141,7 @@ export default function CourseDetail() {
                           >
                         <ListItemText
                               primary={material.title}
-                              secondary={`Тип: ${material.type}`}
+                              // secondary={`Тип: ${material.type}`}
                               primaryTypographyProps={{ color: 'text.primary' }}
                               secondaryTypographyProps={{ color: 'text.secondary' }}
                             />

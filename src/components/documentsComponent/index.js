@@ -97,7 +97,7 @@ const pdfFiles = [
    { name:  'Handbook-BIM.pdf' ,path:   '/documents/Handbook-BIM.pdf'},
    { name:  'IFC-Mandate_2025.pdf'  ,path:'/documents/IFC-Mandate_2025.pdf'},
    { name:  "McKinsey From start‑up to scale‑up Accelerating growth in construction technology (2023).pdf"   ,path:"/documents/McKinsey From start‑up to scale‑up Accelerating growth in construction technology (2023).pdf"},
-   { name:  "McKinsey Global Institute, Reinventing Construction, 2017.pdf"  ,path:'/documents/McKinsey Global Institute, Reinventing Construction, 2017.pdf'},
+   { name:  "McKinsey Global Institute,Reinventing Construction 2017.pdf"  ,path:'/documents/McKinseyGlobalInstitute.pdf'},
    { name:  "Survey_the-role-of-BIM-and-what-the-future-holds.pdf"   ,path:'/documents/Survey_the-role-of-BIM-and-what-the-future-holds.pdf'},
    { name:  "Technology Report 2024.pdf"    ,path:'/documents/Technology Report 2024.pdf '},
    { name:  "Transforming construction with AI.pdf"   ,path:'/documents/Transforming construction with AI.pdf '},

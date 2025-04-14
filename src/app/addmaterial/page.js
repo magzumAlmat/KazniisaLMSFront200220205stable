@@ -184,7 +184,7 @@ export default function MaterialsPage() {
       (type === "image" && imageFiles.length === 0) ||
       (type === "document" && documentFiles.length === 0) ||
       (type === "presentation" && presentationFiles.length === 0) ||
-      (type === "test" && testFilePath.trim() === "")
+      ((type === 'test' || type === 'opros') && testFilePath.trim() === '')
     ) {
       alert("Выберите файл или укажите ссылку на тест!");
       return;
@@ -251,7 +251,8 @@ export default function MaterialsPage() {
         {
           title,
           type,
-          file_path: type === "test" ? testFilePath : uploadedFileResponse?.data.newFile.path,
+          // file_path: type === "test" ? testFilePath : uploadedFileResponse?.data.newFile.path,
+          file_path: type === 'test' || type === 'opros' ? testFilePath : uploadedFileResponse?.data.newFile.path,
           lesson_id: Number(lesson_id),
         },
         {
@@ -328,6 +329,8 @@ export default function MaterialsPage() {
                 <MenuItem value="document">Документ</MenuItem>
                 <MenuItem value="presentation">Презентация</MenuItem>
                 <MenuItem value="test">Ссылка на тест</MenuItem>
+              
+              <MenuItem value="opros">Ссылка на опрос</MenuItem>
               </Select>
             </FormControl>
 
@@ -383,16 +386,16 @@ export default function MaterialsPage() {
               </Box>
             )}
 
-            {type === "test" && (
-              <TextField
-                label="Ссылка на тест"
-                value={testFilePath}
-                onChange={(e) => setTestFilePath(e.target.value)}
-                fullWidth
-                required
-                sx={{ mt: 2 }}
-              />
-            )}
+{(type === 'test' || type === 'opros') && (
+            <TextField
+              label={type === 'test' ? 'Ссылка на тест' : 'Ссылка на опрос'}
+              value={testFilePath}
+              onChange={(e) => setTestFilePath(e.target.value)}
+              fullWidth
+              required
+              sx={{ mt: 2 }}
+            />
+          )}
 
             <FormControl fullWidth sx={{ mt: 2 }}>
               <InputLabel>Выберите урок</InputLabel>

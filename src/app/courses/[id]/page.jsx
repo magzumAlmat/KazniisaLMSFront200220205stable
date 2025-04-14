@@ -1139,27 +1139,34 @@ export default function CourseDetail() {
                             key={material.material_id}
                             sx={{ flexDirection: { xs: "column", sm: "row" }, alignItems: { xs: "flex-start", sm: "center" }, py: 1.5 }}
                           >
-                            <ListItemText
+                        <ListItemText
                               primary={material.title}
                               secondary={`Тип: ${material.type}`}
-                              primaryTypographyProps={{ color: "text.primary" }}
-                              secondaryTypographyProps={{ color: "text.secondary" }}
+                              primaryTypographyProps={{ color: 'text.primary' }}
+                              secondaryTypographyProps={{ color: 'text.secondary' }}
                             />
-                            {material.type === "test" ? (
+                            {material.type === 'test' || material.type === 'opros' ? (
                               updatedFilePath ? (
-                                <a href={updatedFilePath} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-                                  <Button variant="outlined" color="primary" size="small" sx={{ ml: { sm: 2 }, mt: { xs: 1, sm: 0 } }}>
-                                    Перейти к тесту
+                                <a href={updatedFilePath} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                  <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    size="small"
+                                    sx={{ ml: { sm: 2 }, mt: { xs: 1, sm: 0 } }}
+                                  >
+                                    {material.type === 'test' ? 'Перейти к тесту' : 'Перейти к опросу'}
                                   </Button>
                                 </a>
                               ) : (
-                                <Typography sx={{ color: "text.secondary", ml: { sm: 2 }, mt: { xs: 1, sm: 0 } }}>Ссылка недоступна</Typography>
+                                <Typography sx={{ color: 'text.secondary', ml: { sm: 2 }, mt: { xs: 1, sm: 0 } }}>
+                                  Ссылка недоступна
+                                </Typography>
                               )
                             ) : (
                               updatedFilePath ? (
                                 <Button
                                   href={updatedFilePath}
-                                  download={material.title || "file"}
+                                  download={material.title || 'file'}
                                   variant="outlined"
                                   color="primary"
                                   size="small"
@@ -1168,7 +1175,9 @@ export default function CourseDetail() {
                                   Скачать
                                 </Button>
                               ) : (
-                                <Typography sx={{ color: "text.secondary", ml: { sm: 2 }, mt: { xs: 1, sm: 0 } }}>Файл недоступен</Typography>
+                                <Typography sx={{ color: 'text.secondary', ml: { sm: 2 }, mt: { xs: 1, sm: 0 } }}>
+                                  Файл недоступен
+                                </Typography>
                               )
                             )}
                           </ListItem>

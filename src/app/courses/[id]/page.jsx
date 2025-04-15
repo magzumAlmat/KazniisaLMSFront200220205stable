@@ -653,9 +653,22 @@ const VideoPlayer = ({ material }) => {
       <Typography variant="h6" sx={{ color: "text.primary", mb: 1 }}>
         {material.title}
       </Typography>
-      <video controls style={{ width: "100%", maxHeight: "400px", borderRadius: "8px", boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)" }}>
+      {/* <video controls style={{ width: "100%", maxHeight: "400px", borderRadius: "8px", boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)" }}>
         <source src={updatedFilePath} type="video/mp4" />
         Ваш браузер не поддерживает воспроизведение видео.
+      </video> */}
+      <video
+        controls
+        playsInline
+        preload="metadata"
+        style={{ width: '100%', maxHeight: '400px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}
+        onError={(e) => console.error('Video error:', e.target.error)}
+      >
+        <source src={updatedFilePath} type="video/mp4" />
+        Ваш браузер не поддерживает воспроизведение видео.{' '}
+        <a href={updatedFilePath} download>
+          Скачать видео
+        </a>
       </video>
     </Box>
   );

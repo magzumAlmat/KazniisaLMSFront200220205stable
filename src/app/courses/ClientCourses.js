@@ -316,8 +316,14 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
+import dynamic from "next/dynamic";
+
+const EditorJS = dynamic(() => import("@editorjs/editorjs").then((mod) => mod.default), { ssr: false });
+const Header = dynamic(() => import("@editorjs/header").then((mod) => mod.default), { ssr: false });
+const List = dynamic(() => import("@editorjs/list").then((mod) => mod.default), { ssr: false });
 
 // Определяем тему
+// Тема остается прежней
 const theme = createTheme({
   palette: {
     primary: { main: "#009eb0", contrastText: "#fff" }, // Бирюзовый

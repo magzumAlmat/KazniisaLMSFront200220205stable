@@ -28,7 +28,12 @@ const initialState = {
   loadingCourses:true,
   completedLessons:[],
   progress:[],
-  
+
+  reduxPriorityConfig : {
+    EditorJS: 1,
+    Video: 3,
+    AdditionalMaterials: 2,
+  },
 };
 
 // let token;

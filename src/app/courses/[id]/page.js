@@ -1135,7 +1135,7 @@ export default function CourseDetail() {
         editorInstance.current.destroy();
       }
     };
-  }, [token, activeTab, lessons, id, reviewContent]);
+  }, [token, activeTab, lessons, id]);
 
   const fetchLessons = async () => {
     try {
@@ -1235,7 +1235,7 @@ export default function CourseDetail() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleReviewSubmit}
+                onClick={() => handleReviewSubmit()}
                 disabled={isSubmittingReview}
                 sx={{ mt: 1.5, width: { xs: "100%", sm: "auto" } }}
                 startIcon={isSubmittingReview && <CircularProgress size={16} />}

@@ -189,7 +189,7 @@ const TopMenu = ({ userInfo, handleLogout }) => {
             justifyContent: "space-between",
           }}
         >
-          <Box sx={{ position: "relative", width: { xs: "30%", sm: "20%" }, aspectRatio: "5 / 1" }}>
+          <Box sx={{ position: "relative", width: { xs: "40%", sm: "15%" }, aspectRatio: "5 / 1" }}>
             <Image
               src="/logo.png"
               fill

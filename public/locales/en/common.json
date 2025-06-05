@@ -12,7 +12,7 @@
     "materials": "Materials",
     "progress": "Progress",
     "notAuth": "Not Authorized",
-     "documentLibrary":"Библиотека документов"
+     "documentLibrary":"Document library"
   },
   "courses": {
     "title": "Available Courses",

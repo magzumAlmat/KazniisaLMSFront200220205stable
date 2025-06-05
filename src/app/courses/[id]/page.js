@@ -1641,7 +1641,7 @@ export default function CourseDetail() {
               borderBottom: isMobile ? 1 : 0,
               borderRight: isMobile ? 0 : 1,
               borderColor: "divider",
-              width: { xs: "100%", sm: "240px" },
+              width: { xs: "100%", sm: "25%" },
               bgcolor: theme.palette.background.paper,
               maxHeight: { xs: "auto", sm: "calc(100vh - 64px)" },
               overflowY: "auto",

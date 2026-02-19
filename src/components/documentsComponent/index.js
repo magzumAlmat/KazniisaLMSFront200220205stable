@@ -102,7 +102,7 @@ const pdfFiles = [
    { name:  "Technology Report 2024.pdf"    ,path:'/documents/Technology Report 2024.pdf '},
    { name:  "Transforming construction with AI.pdf"   ,path:'/documents/Transforming construction with AI.pdf '},
    { name:  "СТ РК ISO 19650-1-2019.pdf"   ,path:'/documents/СТ РК ISO 19650-1-2019.pdf '},
-   { name:  "СТ РК ISO 19650-2-2019.pdf"   ,path:'/documents/СТ РК ISO 19650-1-2019.pdf '},
+   { name:  "СТ РК ISO 19650-2-2019.pdf"   ,path:'/documents/СТ РК ISO 19650-2-2019.pdf '},
    { name:  "СТ РК ISO 16739-2017.pdf"   ,path:'/documents/СТ РК ISO 16739-2017.pdf '},
   ];
 

@@ -104,6 +104,8 @@ const pdfFiles = [
    { name:  "СТ РК ISO 19650-1-2019.pdf"   ,path:'/documents/СТ РК ISO 19650-1-2019.pdf '},
    { name:  "СТ РК ISO 19650-2-2019.pdf"   ,path:'/documents/СТ РК ISO 19650-2-2019.pdf '},
    { name:  "СТ РК ISO 16739-2017.pdf"   ,path:'/documents/СТ РК ISO 16739-2017.pdf '},
+   { name:"iso_19650_1_2018_organization_and_digitization_of_information.pdf",  path:"/documents/iso_19650_1_2018_organization_and_digitization_of_information.pdf"},
+   { name:"iso_19650_2_2018_organization_and_digitization_of_information.pdf",  path:"/documents/iso_19650_2_2018_organization_and_digitization_of_information.pdf"},
   ];
 
 const DocumentLibrary = () => {
